@@ -6,6 +6,7 @@ const { testConnection } = require('./src/config/db');
 
 // IMPORTA ROTTE
 const authRoutes = require('./src/routes/authRoutes');
+const examRoutes = require('./src/routes/examRoutes');
 
 dotenv.config();
 const app = express();
@@ -25,11 +26,14 @@ testConnection();
 
 // ROTTE API
 app.use('/api/auth', authRoutes); // rotta autenticazione (Login/Register/Logout)
+app.use('/api/exams', examRoutes); // rotta esami (CRUD)
+
+// ROTTA ROOT
 app.get('/', (req, res) => {
     res.send('API StudentHub is running...');
 });
 
-// Avvio server
+// AVVIO SERVER
 app.listen(PORT, () => {
     console.log(`Server in esecuzione su http://localhost:${PORT}`);
 });
