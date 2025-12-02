@@ -4,9 +4,8 @@ const { pool } = require('../config/db');
 const protect = async (req, res, next) => {
     let token;
 
-    // Leggi il token dal cookie 'jwt'
-    token = req.cookies.jwt;
-
+    // Leggi il token dal cookie 'token'
+    token = req.cookies.token;
     if (token) {
         try {
             // Verifica il token
