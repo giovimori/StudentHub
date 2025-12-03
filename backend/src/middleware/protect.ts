@@ -18,7 +18,8 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
                  return;
             }
 
-            req.user = users[0] as any; // il tipo 'any' è gestito dal file express.d.ts
+            // il tipo di 'req.user' è gestito dal file express.d.ts
+            req.user = users[0] as any; 
             next();
         } catch (error) {
             console.error(error);
