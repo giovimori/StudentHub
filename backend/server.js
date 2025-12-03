@@ -7,6 +7,7 @@ const { testConnection } = require('./src/config/db');
 // IMPORTA ROTTE
 const authRoutes = require('./src/routes/authRoutes');
 const examRoutes = require('./src/routes/examRoutes');
+const settingsRoutes = require('./src/routes/settingsRoutes');
 
 dotenv.config();
 const app = express();
@@ -27,6 +28,7 @@ testConnection();
 // ROTTE API
 app.use('/api/auth', authRoutes); // rotta autenticazione (Login/Register/Logout)
 app.use('/api/exams', examRoutes); // rotta esami (CRUD)
+app.use('/api/settings', settingsRoutes); // rotta impostazione (voti: tema, soglie)
 
 // ROTTA ROOT
 app.get('/', (req, res) => {

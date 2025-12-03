@@ -41,7 +41,7 @@ exports.addExam = async (req, res) => {
             [req.user.id, nome, voto, lode || false, cfu, data, xp]
         );
 
-        // 4. Aggiorna XP totali utente (Il livello si aggiornerà da solo grazie alla tabella di lookup)
+        // 4. Aggiorna XP totali utente (i aggiorna da solo tramite la tabella di lookup)
         await connection.query(
             'UPDATE utenti SET xp_totali = xp_totali + ? WHERE id = ?',
             [xp, req.user.id]
