@@ -3,8 +3,7 @@ const router = express.Router();
 const examController = require('../controllers/examController');
 const { protect } = require('../middleware/protect');
 
-// Applico la protezione a TUTTE le rotte di questo file
-// Se i cookie non sono validi, non passa oltre questa riga.
+// Applica la protezione a tutte le rotte
 router.use(protect);
 
 router.get('/', examController.getExams);         // GET /api/exams
