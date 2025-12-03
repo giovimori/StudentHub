@@ -1,9 +1,13 @@
-const { pool } = require('../config/db');
+import { Request, Response } from 'express';
+import { pool } from '../config/db';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 
-// GET: Ottieni tutti gli esami dello studente loggato
-exports.getExams = async (req, res) => {
+// GET: Ottieni tutti gli esami
+export const getExams = async (req: Request, res: Response) => {
     try {
-        // req.user.id arriva dal middleware 'protect'
+        // req.user esiste perchè definito nel middleware 'protect'
+        if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
+
         const [exams] = await pool.query(
             'SELECT * FROM esami WHERE id_utente = ? ORDER BY data DESC', 
             [req.user.id]
@@ -15,33 +19,24 @@ exports.getExams = async (req, res) => {
     }
 };
 
-// POST: Aggiungi un nuovo esame
-exports.addExam = async (req, res) => {
-    const connection = await pool.getConnection(); // Usiamo una transazione
+// POST: Aggiungi esame
+export const addExam = async (req: Request, res: Response) => {
+    const connection = await pool.getConnection();
     try {
+        if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
+
         const { nome, voto, lode, cfu, data } = req.body;
         
-        // 1. Validazione base
-        if (!nome || !voto || !cfu || !data) {
-             return res.status(400).json({ message: 'Dati mancanti' });
-        }
-
-        // 2. Calcolo XP (Logica Gamification)
-        // Formula base: Voto * CFU. Bonus 50 XP se c'è la lode.
         let xp = voto * cfu;
-        if (lode) {
-            xp += 50; 
-        }
+        if (lode) xp += 50;
 
         await connection.beginTransaction();
 
-        // 3. Inserisci l'esame
-        const [result] = await connection.query(
+        const [result] = await connection.query<ResultSetHeader>(
             'INSERT INTO esami (id_utente, nome, voto, lode, cfu, data, xp_guadagnati) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [req.user.id, nome, voto, lode || false, cfu, data, xp]
         );
 
-        // 4. Aggiorna XP totali utente (i aggiorna da solo tramite la tabella di lookup)
         await connection.query(
             'UPDATE utenti SET xp_totali = xp_totali + ? WHERE id = ?',
             [xp, req.user.id]
@@ -56,7 +51,7 @@ exports.addExam = async (req, res) => {
         });
 
     } catch (error) {
-        await connection.rollback(); // Annulla tutto se c'è un errore
+        await connection.rollback();
         console.error(error);
         res.status(500).json({ message: 'Errore aggiunta esame' });
     } finally {
@@ -64,14 +59,15 @@ exports.addExam = async (req, res) => {
     }
 };
 
-// DELETE: Rimuovi un esame
-exports.deleteExam = async (req, res) => {
+// DELETE: Rimuovi esame
+export const deleteExam = async (req: Request, res: Response) => {
     const connection = await pool.getConnection();
     try {
+        if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
+
         const { id } = req.params;
 
-        // 1. Recupera l'esame per sapere quanti XP togliere (e verificare che sia dell'utente)
-        const [exam] = await connection.query('SELECT xp_guadagnati FROM esami WHERE id = ? AND id_utente = ?', [id, req.user.id]);
+        const [exam] = await connection.query<RowDataPacket[]>('SELECT xp_guadagnati FROM esami WHERE id = ? AND id_utente = ?', [id, req.user.id]);
         
         if (exam.length === 0) {
             return res.status(404).json({ message: 'Esame non trovato o non autorizzato' });
@@ -81,10 +77,8 @@ exports.deleteExam = async (req, res) => {
 
         await connection.beginTransaction();
 
-        // 2. Elimina esame
         await connection.query('DELETE FROM esami WHERE id = ?', [id]);
 
-        // 3. Sottrai XP all'utente
         await connection.query(
             'UPDATE utenti SET xp_totali = xp_totali - ? WHERE id = ?',
             [xpDaRimuovere, req.user.id]

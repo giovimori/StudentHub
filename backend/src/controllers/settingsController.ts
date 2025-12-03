@@ -1,10 +1,13 @@
-const { pool } = require('../config/db');
+import { Request, Response } from 'express';
+import { pool } from '../config/db';
+import { RowDataPacket } from 'mysql2';
 
-// GET: Ottieni le impostazioni dell'utente loggato
-exports.getSettings = async (req, res) => {
+// GET: Impostazioni
+export const getSettings = async (req: Request, res: Response) => {
     try {
-        // req.user.id arriva dal middleware 'protect'
-        const [settings] = await pool.query(
+        if (!req.user) return res.status(401).json({ message: 'Non autenticato' });
+
+        const [settings] = await pool.query<RowDataPacket[]>(
             'SELECT tema_voti, rgb_soglia_bassa, rgb_soglia_alta FROM impostazioni_utente WHERE id_utente = ?', 
             [req.user.id]
         );
@@ -20,17 +23,17 @@ exports.getSettings = async (req, res) => {
     }
 };
 
-// PUT: Aggiorna le impostazioni
-exports.updateSettings = async (req, res) => {
+// PUT: Aggiorna impostazioni
+export const updateSettings = async (req: Request, res: Response) => {
     try {
+        if (!req.user) return res.status(401).json({ message: 'Non autenticato' });
+
         const { tema_voti, rgb_soglia_bassa, rgb_soglia_alta } = req.body;
 
-        // Validazione input base
         if (!tema_voti) {
             return res.status(400).json({ message: 'Il tema è obbligatorio' });
         }
 
-        // Validazione logica per il tema RGB
         if (tema_voti === 'RGB') {
             if (rgb_soglia_bassa > rgb_soglia_alta) {
                 return res.status(400).json({ message: 'La soglia bassa non può essere maggiore di quella alta' });
@@ -40,7 +43,6 @@ exports.updateSettings = async (req, res) => {
             }
         }
 
-        // Aggiornamento nel DB
         await pool.query(
             'UPDATE impostazioni_utente SET tema_voti = ?, rgb_soglia_bassa = ?, rgb_soglia_alta = ? WHERE id_utente = ?',
             [tema_voti, rgb_soglia_bassa, rgb_soglia_alta, req.user.id]
