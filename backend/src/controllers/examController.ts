@@ -19,41 +19,70 @@ export const getExams = async (req: Request, res: Response) => {
     }
 };
 
-// POST: Aggiungi esame
+// POST: Aggiungi esame (max 5 esami)
 export const addExam = async (req: Request, res: Response) => {
     const connection = await pool.getConnection();
     try {
         if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
 
-        const { nome, voto, lode, cfu, data } = req.body;
-        
-        let xp = voto * cfu;
-        if (lode) xp += 50;
+        const exams = req.body;
+
+        // Controllo che sia un array
+        if (!Array.isArray(exams)) {
+            return res.status(400).json({ message: 'Il formato dati deve essere una lista di esami' });
+        }
+
+        // Controllo numero massimo di esami
+        if (exams.length > 5) {
+            return res.status(400).json({ message: 'Puoi inserire massimo 5 esami alla volta!' });
+        }
+
+        if (exams.length === 0) {
+            return res.status(400).json({ message: 'La lista degli esami non può essere vuota' });
+        }
 
         await connection.beginTransaction();
 
-        const [result] = await connection.query<ResultSetHeader>(
-            'INSERT INTO esami (id_utente, nome, voto, lode, cfu, data, xp_guadagnati) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [req.user.id, nome, voto, lode || false, cfu, data, xp]
-        );
+        let totalXp = 0;
+        const insertedIds = [];
+
+        for (const exam of exams) {
+            const { nome, voto, lode, cfu, data } = exam;
+            
+            // Validazione base per ogni esame
+            if (!nome || !voto || !cfu || !data) {
+                throw new Error('Dati mancanti per uno degli esami');
+            }
+
+            let xp = voto * cfu;
+            if (lode) xp += 50;
+            totalXp += xp;
+
+            const [result] = await connection.query<ResultSetHeader>(
+                'INSERT INTO esami (id_utente, nome, voto, lode, cfu, data, xp_guadagnati) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [req.user.id, nome, voto, lode || false, cfu, data, xp]
+            );
+            insertedIds.push(result.insertId);
+        }
 
         await connection.query(
             'UPDATE utenti SET xp_totali = xp_totali + ? WHERE id = ?',
-            [xp, req.user.id]
+            [totalXp, req.user.id]
         );
 
         await connection.commit();
 
         res.status(201).json({ 
-            message: 'Esame aggiunto con successo!', 
-            id: result.insertId,
-            xp_guadagnati: xp 
+            message: 'Esami aggiunti con successo!', 
+            count: insertedIds.length,
+            ids: insertedIds,
+            xp_totali_guadagnati: totalXp 
         });
 
     } catch (error) {
         await connection.rollback();
         console.error(error);
-        res.status(500).json({ message: 'Errore aggiunta esame' });
+        res.status(500).json({ message: error instanceof Error ? error.message : 'Errore aggiunta esami' });
     } finally {
         connection.release();
     }
