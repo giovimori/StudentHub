@@ -14,13 +14,15 @@ const AdminPage = () => import('../pages/AdminPage.vue')
 const NotFound = () => import('../pages/NotFound.vue')
 const SettingsPage = () => import('../pages/SettingsPage.vue') // <--- AGGIUNGI QUESTO
 const AboutPage = () => import('../pages/AboutPage.vue') // <--- AGGIUNGI QUESTO
+const ContactPage = () => import('../pages/ContactPage.vue') // <--- AGGIUNTO
 
 const routes = [
   { path: '/', name: 'Landing', component: LandingPage, meta: { public: true } },
   { path: '/login', name: 'Login', component: LoginPage, meta: { public: true } },
   { path: '/register', name: 'Register', component: RegisterPage, meta: { public: true } },
   {path: '/about', name: 'About', component: AboutPage, meta: { public: true } }, // <--- AGGIUNGI QUESTO
-  
+  { path: '/contact', name: 'Contact', component: ContactPage, meta: { public: true } }, // <--- AGGIUNTO
+
   // Rotte Protette (Richiedono Login)
   { path: '/home', name: 'Home', component: HomePage },
   { path: '/career', name: 'Career', component: CareerPage },
@@ -41,7 +43,7 @@ const router = createRouter({
 
 // Navigation Guard: Protezione delle rotte
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/', '/login', '/register', '/about'];
+  const publicPages = ['/', '/login', '/register', '/about', '/contact', '/privacy', '/terms'];
   const authRequired = !publicPages.includes(to.path);
   
   // Nota: useremo Pinia per controllare se siamo loggati
