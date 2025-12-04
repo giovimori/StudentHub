@@ -2,12 +2,14 @@
 import NavBar from '../components/NavBar.vue'
 import { useSettingsStore } from '../stores/settings'
 import { ref, onMounted, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const settingsStore = useSettingsStore()
 const saving = ref(false)
 const message = ref('')
 
-// Copia locale dei dati per il form
 const form = reactive({
   tema_voti: 'DEFAULT',
   rgb_soglia_bassa: 18,
@@ -16,7 +18,6 @@ const form = reactive({
 
 onMounted(async () => {
   await settingsStore.fetchSettings()
-  // Aggiorna il form con i dati scaricati
   Object.assign(form, settingsStore.preferences)
 })
 
@@ -24,7 +25,7 @@ const save = async () => {
   saving.value = true
   message.value = ''
   
-  // Validazione Frontend
+  // Validazione rapida
   if (form.tema_voti === 'RGB' && form.rgb_soglia_bassa > form.rgb_soglia_alta) {
     message.value = "Errore: La soglia minima non può essere maggiore della massima."
     saving.value = false
@@ -32,8 +33,15 @@ const save = async () => {
   }
 
   const success = await settingsStore.updateSettings(form)
+  
   if (success) {
     message.value = "Impostazioni salvate con successo!"
+    
+    // --- AZIONE RICHIESTA: REINDIRIZZAMENTO ALLA HOME ---
+    setTimeout(() => {
+        router.push('/home') 
+    }, 1000); // Aspetta 1 secondo per far leggere il messaggio di successo
+
   } else {
     message.value = "Errore durante il salvataggio."
   }
@@ -46,8 +54,23 @@ const save = async () => {
     <NavBar />
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-2xl">
-      <h1 class="text-3xl font-bold text-[#3b76ad] mb-8 border-b pb-4">Impostazioni Utente</h1>
+      
+      <div class="flex items-center gap-4 mb-8 border-b pb-4">
+        
+        <svg 
+            @click="router.push('/home')" 
+            class="h-8 w-8 text-gray-600 hover:text-[#3b76ad] cursor-pointer transition" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24" 
+            stroke-width="2"
+        >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
 
+        <h1 class="text-3xl font-bold text-[#3b76ad]">Impostazioni Utente</h1>
+      </div>
+      
       <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-200">
         
         <h3 class="text-xl font-bold mb-4">Stile Visualizzazione Voti</h3>
