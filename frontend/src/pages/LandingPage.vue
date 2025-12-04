@@ -1,10 +1,9 @@
 <script setup>
-// LandingPage.vue - Logica minimale, tutto layout
-import AppFooter from '../components/AppFooter.vue'
+// Rimuovi l'import di AppFooter, ora è gestito globalmente!
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f8f9fa] font-sans">
+  <div class="flex-grow flex flex-col font-sans">
     
     <header class="bg-[#151e2b] text-white py-4 px-8 shadow-md flex items-center">
       <div class="flex items-center gap-3">
@@ -37,7 +36,7 @@ import AppFooter from '../components/AppFooter.vue'
         Accedi a StudentHub
       </router-link>
 
-      <div class="mt-auto mb-10 text-gray-400 text-xs max-w-5xl mx-auto px-4 leading-relaxed">
+      <div class="mb-10 text-gray-400 text-xs max-w-5xl mx-auto px-4 leading-relaxed">
         Il sistema Web denominato "StudentHub" è un'opera dell'ingegno a carattere esclusivamente accademico e dimostrativo. 
         Questo progetto è stato ideato, progettato e realizzato integralmente dagli studenti 
         <span class="font-medium">Andruccioli Diego, Mici Rei e Morelli Giovanni</span> 
@@ -46,5 +45,5 @@ import AppFooter from '../components/AppFooter.vue'
 
     </main>
 
-  </div>
+    </div>
 </template>

@@ -1,9 +1,15 @@
 <script setup>
-// Qui importeremo la NavBar in futuro
+import AppFooter from './components/AppFooter.vue'
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 text-gray-900 font-sans">
-    <router-view />
+  <div class="min-h-screen flex flex-col bg-[#f8f9fa] text-gray-900 font-sans">
+    
+    <div class="flex-grow w-full flex flex-col">
+      <router-view />
+    </div>
+
+    <AppFooter />
+    
   </div>
 </template>
