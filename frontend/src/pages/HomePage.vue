@@ -3,11 +3,10 @@ import NavBar from '../components/NavBar.vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f8f9fa] font-sans">
+  <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans w-full">
     
     <NavBar />
 
@@ -61,8 +60,6 @@ const router = useRouter()
       </div>
 
     </main>
-
-
 
   </div>
 </template>
