@@ -90,12 +90,6 @@ onMounted(async () => {
       <div v-else-if="exams.length === 0" class="text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-300">
         <p class="text-2xl text-gray-400 font-bold mb-4">Il tuo libretto è vuoto 🎓</p>
         <p class="text-gray-500">Inizia inserendo il tuo primo esame superato!</p>
-        <button 
-            @click="navigateToInsert"
-            class="mt-6 text-[#3b76ad] font-bold underline hover:text-[#2c5a85]"
-          >
-            Inserisci il primo esame
-          </button>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
