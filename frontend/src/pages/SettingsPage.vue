@@ -50,7 +50,7 @@ const save = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f8f9fa] font-sans">
+  <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans">
     <NavBar />
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-2xl">

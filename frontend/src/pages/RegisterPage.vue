@@ -34,7 +34,7 @@ const handleRegister = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f8f9fa] font-sans">
+  <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans">
     
     <header class="bg-[#151e2b] text-white py-4 px-8 shadow-md flex items-center">
       <div class="flex items-center gap-3 cursor-pointer" @click="router.push('/')">
