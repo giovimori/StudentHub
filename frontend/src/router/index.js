@@ -1,43 +1,85 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '../stores/auth' // Lo configureremo dopo
+import { useAuthStore } from '../stores/auth' // Importiamo lo store per controllare il login
 
-// Importiamo le pagine (Lazy loading per performance migliori)
-const LandingPage = () => import('../pages/LandingPage.vue')
-const LoginPage = () => import('../pages/LoginPage.vue')
-const RegisterPage = () => import('../pages/RegisterPage.vue')
-const HomePage = () => import('../pages/HomePage.vue')
-const CareerPage = () => import('../pages/CareerPage.vue')
-const InsertExamPage = () => import('../pages/InsertExamPage.vue')
-const StatsPage = () => import('../pages/StatsPage.vue')
-const ObjectivesPage = () => import('../pages/ObjectivesPage.vue')
-const AdminPage = () => import('../pages/AdminPage.vue')
-const NotFound = () => import('../pages/NotFound.vue')
-const SettingsPage = () => import('../pages/SettingsPage.vue')
-const AboutPage = () => import('../pages/AboutPage.vue')
-const ContactPage = () => import('../pages/ContactPage.vue')
-const PrivacyPage = () => import('../pages/PrivacyPage.vue')
-const TermsPage = () => import('../pages/TermsPage.vue')
+// Import delle pagine
+import LandingPage from '../pages/LandingPage.vue'
+import LoginPage from '../pages/LoginPage.vue'
+import RegisterPage from '../pages/RegisterPage.vue'
+import HomePage from '../pages/HomePage.vue'
+import CareerPage from '../pages/CareerPage.vue'
+import InsertExamPage from '../pages/InsertExamPage.vue'
+import StatsPage from '../pages/StatsPage.vue'
+import SettingsPage from '../pages/SettingsPage.vue'
+import NotFound from '../pages/NotFound.vue'
 
+// Definiamo le rotte con i metadati di sicurezza
 const routes = [
-  { path: '/', name: 'Landing', component: LandingPage, meta: { public: true } },
-  { path: '/login', name: 'Login', component: LoginPage, meta: { public: true } },
-  { path: '/register', name: 'Register', component: RegisterPage, meta: { public: true } },
-  {path: '/about', name: 'About', component: AboutPage, meta: { public: true } }, // <--- AGGIUNGI QUESTO
-  { path: '/contact', name: 'Contact', component: ContactPage, meta: { public: true } }, // <--- AGGIUNTO
+  // 1. ROTTE PUBBLICHE (Guest)
+  // Se un utente loggato prova ad accedervi, verrà reindirizzato alla Home
+  { 
+    path: '/', 
+    name: 'Landing', 
+    component: LandingPage,
+    meta: { guest: true } 
+  },
+  { 
+    path: '/login', 
+    name: 'Login', 
+    component: LoginPage,
+    meta: { guest: true }
+  },
+  { 
+    path: '/register', 
+    name: 'Register', 
+    component: RegisterPage,
+    meta: { guest: true }
+  },
 
-  // Rotte Protette (Richiedono Login)
-  { path: '/home', name: 'Home', component: HomePage },
-  { path: '/career', name: 'Career', component: CareerPage },
-  { path: '/career/insert', name: 'InsertExam', component: InsertExamPage },
-  { path: '/stats', name: 'Stats', component: StatsPage },
-  { path: '/objectives', name: 'Objectives', component: ObjectivesPage },
-  { path: '/admin', name: 'Admin', component: AdminPage },
-  { path: '/settings', name: 'Settings', component: SettingsPage },
-  { path: '/privacy', name: 'Privacy', component: PrivacyPage, meta: { public: true } },
-  { path: '/terms', name: 'Terms', component: TermsPage, meta: { public: true } },
-  
-  // Catch-all per 404
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
+  // 2. ROTTE PROTETTE (Richiedono Login)
+  // Se un utente NON loggato prova ad accedervi, verrà reindirizzato al Login
+  { 
+    path: '/home', 
+    name: 'Home', 
+    component: HomePage,
+    meta: { requiresAuth: true } 
+  },
+  { 
+    path: '/career', 
+    name: 'Career', 
+    component: CareerPage,
+    meta: { requiresAuth: true } 
+  },
+  { 
+    path: '/career/insert', 
+    name: 'InsertExam', 
+    component: InsertExamPage,
+    meta: { requiresAuth: true } 
+  },
+  { 
+    path: '/stats', 
+    name: 'Stats', 
+    component: StatsPage,
+    meta: { requiresAuth: true } 
+  },
+  { 
+    path: '/settings', 
+    name: 'Settings', 
+    component: SettingsPage,
+    meta: { requiresAuth: true } 
+  },
+
+  // 3. Pagine accessorie (solitamente pubbliche)
+  { path: '/about', name: 'About', component: NotFound }, // Placeholder
+  { path: '/contact', name: 'Contact', component: NotFound }, // Placeholder
+  { path: '/privacy', name: 'Privacy', component: NotFound }, // Placeholder
+  { path: '/terms', name: 'Terms', component: NotFound }, // Placeholder
+
+  // 4. Catch-all (Pagina non trovata)
+  { 
+    path: '/:pathMatch(.*)*', 
+    name: 'NotFound', 
+    component: NotFound 
+  }
 ]
 
 const router = createRouter({
@@ -45,20 +87,24 @@ const router = createRouter({
   routes
 })
 
-// Navigation Guard: Protezione delle rotte
+// --- NAVIGATION GUARD ---
+// Questo controllo viene eseguito prima di ogni cambio pagina
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/', '/login', '/register', '/about', '/contact', '/privacy', '/terms'];
-  const authRequired = !publicPages.includes(to.path);
-  
-  // Nota: useremo Pinia per controllare se siamo loggati
-  // Per ora commentiamo il controllo reale finché non facciamo lo store
-  // const auth = useAuthStore();
-  
-  // if (authRequired && !auth.token) {
-  //   return next('/login');
-  // }
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
 
-  next();
+  // CASO 1: La rotta richiede login, ma l'utente NON è autenticato
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login') // Reindirizza al login
+  } 
+  // CASO 2: La rotta è per ospiti (es. Login), ma l'utente È autenticato
+  else if (to.meta.guest && isAuthenticated) {
+    next('/home') // Reindirizza alla dashboard
+  }
+  // CASO 3: Tutto ok, procedi
+  else {
+    next()
+  }
 })
 
 export default router
