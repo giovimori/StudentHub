@@ -9,6 +9,8 @@ import examRoutes from './src/routes/examRoutes';
 import settingsRoutes from './src/routes/settingsRoutes';
 import statsRoutes from './src/routes/statsRoutes';
 import userRoutes from './src/routes/userRoutes';
+import gamificationRoutes from './src/routes/gamificationRoutes';
+import adminRoutes from './src/routes/adminRoutes';
 
 dotenv.config();
 const app = express();
@@ -30,6 +32,8 @@ app.use('/api/exams', examRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/gamification', gamificationRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
     res.send('API StudentHub is running...');
