@@ -19,15 +19,11 @@ import ContactPage from '../pages/ContactPage.vue'
 import PrivacyPage from '../pages/PrivacyPage.vue'
 import TermsPage from '../pages/TermsPage.vue'
 
-<<<<<<< HEAD
 // Placeholder per pagine che potrebbero non essere ancora create (opzionale)
 const ObjectivesPage = NotFound // Sostituisci con import reale se esiste
 
 
 const AdminPage = () => import('../pages/AdminPage.vue')
-=======
-const AdminPage = NotFound      // Sostituisci con import reale se esiste
->>>>>>> 86579ea67eba14caa7f78cd5d952a4cda2307228
 
 const routes = [
   // 1. ROTTE GUEST (Solo per non loggati -> Redirect a Home se loggato)
