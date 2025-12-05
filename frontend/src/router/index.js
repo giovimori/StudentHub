@@ -19,6 +19,7 @@ import ContactPage from '../pages/ContactPage.vue'
 import PrivacyPage from '../pages/PrivacyPage.vue'
 import TermsPage from '../pages/TermsPage.vue'
 
+<<<<<<< HEAD
 // Placeholder per pagine che potrebbero non essere ancora create (opzionale)
 const ObjectivesPage = NotFound // Sostituisci con import reale se esiste
 
