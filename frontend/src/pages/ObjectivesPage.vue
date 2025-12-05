@@ -101,7 +101,7 @@ onMounted(() => {
                 </div>
 
                 <div class="w-24 text-right font-bold text-[#151e2b]">
-                  <span class="text-yellow-500 mr-1">⚡</span>{{ user.xp_totali }}
+                  <span class="text-black-500 mr-1">{{ user.xp_totali }}</span>
                 </div>
               </div>
             </div>

@@ -13,7 +13,10 @@ const rows = ref([
 ])
 
 const addRow = () => {
-  rows.value.push({ nome: '', voto: '', lode: false, data: '', cfu: '' })
+  // Aggiunge riga solo se siamo sotto il limite (ridondante col v-if ma più sicuro)
+  if (rows.value.length < 5) {
+    rows.value.push({ nome: '', voto: '', lode: false, data: '', cfu: '' })
+  }
 }
 
 const removeRow = (index) => {
@@ -29,6 +32,8 @@ const submitExams = async () => {
   errorMsg.value = ''
   
   try {
+    // 1. Validazione Dati
+    const payload = []
     for (const row of rows.value) {
       if (!row.nome || !row.voto || !row.data || !row.cfu) {
         throw new Error("Compila tutti i campi di tutte le righe.")
@@ -36,24 +41,26 @@ const submitExams = async () => {
       if (row.voto < 18 || row.voto > 30) {
         throw new Error(`Il voto ${row.voto} non è valido (18-30).`)
       }
-    }
-
-    const promises = rows.value.map(row => {
-      return axios.post('http://localhost:3000/api/exams', {
+      
+      payload.push({
         nome: row.nome,
         voto: parseInt(row.voto),
         lode: row.lode,
         cfu: parseInt(row.cfu),
         data: row.data
-      }, { withCredentials: true })
+      })
+    }
+
+    // 2. INVIO UNICA RICHIESTA
+    await axios.post('http://localhost:3000/api/exams', payload, { 
+      withCredentials: true 
     })
 
-    await Promise.all(promises)
     router.push('/career')
 
   } catch (error) {
     console.error(error)
-    errorMsg.value = error.message || "Errore durante il salvataggio."
+    errorMsg.value = error.response?.data?.message || error.message || "Errore durante il salvataggio."
   } finally {
     loading.value = false
   }
@@ -61,24 +68,21 @@ const submitExams = async () => {
 </script>
 
 <template>
-  <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans">
+  <div class="min-h-screen flex flex-col bg-[#f8f9fa] font-sans">
     
     <NavBar />
 
     <main class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
       
-      <nav class="text-sm text-gray-500 mb-4 font-medium">
-        <router-link to="/home" class="hover:text-[#3b76ad]">Home</router-link> 
-        <span class="mx-2">></span> 
-        <router-link to="/career" class="hover:text-[#3b76ad]">Carriera</router-link> 
-        <span class="mx-2">></span>
-        <span class="text-[#3b76ad] font-bold">Inserisci Esame</span>
-      </nav>
-
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 class="text-4xl font-bold text-[#3b76ad] mb-2">Inserisci Esame</h1>
-          <p class="text-xl font-bold text-black">Nuovi voti vogliono dire nuovi punti XP!</p>
+          <nav class="text-sm text-gray-500 mb-2 font-medium">
+            <router-link to="/career" class="hover:text-[#3b76ad]">Carriera</router-link> 
+            <span class="mx-2">></span>
+            <span class="text-[#3b76ad] font-bold">Inserisci Esame</span>
+          </nav>
+          <h1 class="text-4xl font-bold text-[#3b76ad] mb-2">Nuovo Inserimento</h1>
+          <p class="text-xl font-bold text-black">Aggiungi fino a 5 esami contemporaneamente</p>
         </div>
 
         <button 
@@ -86,15 +90,13 @@ const submitExams = async () => {
           :disabled="loading"
           class="bg-[#3b76ad] hover:bg-[#2c5a85] disabled:opacity-50 text-white text-lg font-bold py-3 px-10 rounded-lg shadow-md transition transform hover:scale-105"
         >
-          {{ loading ? 'Salvataggio...' : 'conferma' }}
+          {{ loading ? 'Salvataggio...' : 'Conferma Inserimento' }}
         </button>
       </div>
 
       <div v-if="errorMsg" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 text-center font-bold">
         {{ errorMsg }}
       </div>
-
-      <h2 class="text-2xl font-bold text-black mb-4">Stai inserendo i seguenti esami:</h2>
 
       <div class="bg-white border-2 border-gray-200 rounded-xl shadow-sm relative">
         
@@ -126,48 +128,25 @@ const submitExams = async () => {
             </div>
 
             <div class="col-span-4">
-              <input 
-                v-model="row.nome"
-                type="text" 
-                placeholder="Nome Esame"
-                class="w-full p-2 border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base"
-              />
+              <input v-model="row.nome" type="text" placeholder="Nome Esame" class="w-full p-2 border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base" />
             </div>
 
             <div class="col-span-2 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
-              <input 
-                v-model="row.voto"
-                type="number" 
-                min="18" 
-                max="30"
-                placeholder="30"
-                class="w-full md:w-20 p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base"
-              />
+              <input v-model="row.voto" type="number" min="18" max="30" placeholder="30" class="w-full md:w-20 p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base" />
               <label class="flex items-center cursor-pointer text-xs font-bold text-gray-500 select-none">
-                <input type="checkbox" v-model="row.lode" class="mr-1 accent-[#3b76ad] w-4 h-4">
-                L
+                <input type="checkbox" v-model="row.lode" class="mr-1 accent-[#3b76ad] w-4 h-4"> L
               </label>
             </div>
 
             <div class="col-span-3">
-              <input 
-                v-model="row.data"
-                type="date" 
-                class="w-full p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-gray-600 text-sm md:text-base"
-              />
+              <input v-model="row.data" type="date" class="w-full p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-gray-600 text-sm md:text-base" />
             </div>
 
             <div class="col-span-2 flex items-center justify-center relative">
-              <input 
-                v-model="row.cfu"
-                type="number" 
-                min="1"
-                placeholder="6"
-                class="w-full md:w-20 p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base"
-              />
+              <input v-model="row.cfu" type="number" min="1" placeholder="6" class="w-full md:w-20 p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base" />
               
               <button 
-                v-if="index === rows.length - 1"
+                v-if="index === rows.length - 1 && rows.length < 5"
                 @click="addRow"
                 class="absolute -right-3 md:-right-8 text-[#3b76ad] hover:text-[#2c5a85] transition transform hover:scale-110 bg-white rounded-full z-50 shadow-sm"
                 title="Aggiungi riga"
