@@ -13,10 +13,9 @@ const rows = ref([
 ])
 
 const addRow = () => {
+  // Aggiunge riga solo se siamo sotto il limite (ridondante col v-if ma più sicuro)
   if (rows.value.length < 5) {
     rows.value.push({ nome: '', voto: '', lode: false, data: '', cfu: '' })
-  } else {
-    alert("Puoi inserire massimo 5 esami alla volta!")
   }
 }
 
@@ -43,7 +42,6 @@ const submitExams = async () => {
         throw new Error(`Il voto ${row.voto} non è valido (18-30).`)
       }
       
-      // Preparazione oggetto pulito
       payload.push({
         nome: row.nome,
         voto: parseInt(row.voto),
@@ -53,7 +51,7 @@ const submitExams = async () => {
       })
     }
 
-    // 2. INVIO UNICA RICHIESTA (Array)
+    // 2. INVIO UNICA RICHIESTA
     await axios.post('http://localhost:3000/api/exams', payload, { 
       withCredentials: true 
     })
@@ -71,7 +69,9 @@ const submitExams = async () => {
 
 <template>
   <div class="min-h-screen flex flex-col bg-[#f8f9fa] font-sans">
+    
     <NavBar />
+
     <main class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
       
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -99,6 +99,7 @@ const submitExams = async () => {
       </div>
 
       <div class="bg-white border-2 border-gray-200 rounded-xl shadow-sm relative">
+        
         <div class="grid grid-cols-12 gap-2 md:gap-4 bg-[#0f3c66] text-white font-bold py-4 px-4 text-center items-center text-sm md:text-base rounded-t-xl">
           <div class="col-span-1"></div>
           <div class="col-span-4 text-left pl-2">Esame</div>
@@ -108,11 +109,21 @@ const submitExams = async () => {
         </div>
 
         <div>
-          <div v-for="(row, index) in rows" :key="index" class="grid grid-cols-12 gap-2 md:gap-4 items-center py-4 px-4 border-b border-gray-100 last:border-0 last:rounded-b-xl hover:bg-gray-50 transition relative">
+          <div 
+            v-for="(row, index) in rows" 
+            :key="index" 
+            class="grid grid-cols-12 gap-2 md:gap-4 items-center py-4 px-4 border-b border-gray-100 last:border-0 last:rounded-b-xl hover:bg-gray-50 transition relative"
+          >
             
             <div class="col-span-1 flex justify-center">
-              <button @click="removeRow(index)" class="text-gray-400 hover:text-red-600 transition p-2 rounded-full hover:bg-red-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              <button 
+                @click="removeRow(index)"
+                class="text-gray-400 hover:text-red-600 transition p-2 rounded-full hover:bg-red-50"
+                title="Elimina riga"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </button>
             </div>
 
@@ -134,14 +145,23 @@ const submitExams = async () => {
             <div class="col-span-2 flex items-center justify-center relative">
               <input v-model="row.cfu" type="number" min="1" placeholder="6" class="w-full md:w-20 p-2 text-center border border-gray-300 rounded focus:border-[#3b76ad] focus:ring-1 focus:ring-[#3b76ad] outline-none text-sm md:text-base" />
               
-              <button v-if="index === rows.length - 1" @click="addRow" class="absolute -right-3 md:-right-8 text-[#3b76ad] hover:text-[#2c5a85] transition transform hover:scale-110 bg-white rounded-full z-50 shadow-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg>
+              <button 
+                v-if="index === rows.length - 1 && rows.length < 5"
+                @click="addRow"
+                class="absolute -right-3 md:-right-8 text-[#3b76ad] hover:text-[#2c5a85] transition transform hover:scale-110 bg-white rounded-full z-50 shadow-sm"
+                title="Aggiungi riga"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg>
               </button>
             </div>
 
           </div>
         </div>
       </div>
+
     </main>
+
   </div>
 </template>
