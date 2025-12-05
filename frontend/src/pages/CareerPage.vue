@@ -39,8 +39,8 @@ const getBadgeColor = (voto) => {
   if (prefs.tema_voti === 'DEFAULT') {
     return 'bg-[#3b76ad] text-white'; 
   }
-  if (voto < prefs.rgb_soglia_bassa) return 'bg-red-500 text-white';
-  else if (voto >= prefs.rgb_soglia_alta) return 'bg-green-600 text-white';
+  if (voto < prefs.rgb_soglia_bassa) return 'bg-red-600 text-white';
+  else if (voto >= prefs.rgb_soglia_alta) return 'bg-green-700 text-white';
   else return 'bg-yellow-400 text-black';
 }
 

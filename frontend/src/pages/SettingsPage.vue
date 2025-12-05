@@ -89,9 +89,9 @@ const save = async () => {
             <div class="border-2 border-gray-200 rounded-xl p-4 peer-checked:border-[#3b76ad] peer-checked:bg-blue-50 transition text-center hover:bg-gray-50 h-full flex flex-col justify-center items-center">
               <div class="font-bold text-gray-700 mb-2">Dinamico (RGB)</div>
               <div class="flex justify-center gap-2">
-                <div class="w-12 h-12 bg-red-500 text-black rounded-full flex items-center justify-center font-bold text-lg shadow-md">18</div>
+                <div class="w-12 h-12 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">18</div>
                 <div class="w-12 h-12 bg-yellow-400 text-black rounded-full flex items-center justify-center font-bold text-lg shadow-md">24</div>
-                <div class="w-12 h-12 bg-green-600 text-black rounded-full flex items-center justify-center font-bold text-lg shadow-md">30</div>
+                <div class="w-12 h-12 bg-green-700 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">30</div>
               </div>
             </div>
           </label>
@@ -108,7 +108,7 @@ const save = async () => {
             </div>
 
             <div>
-              <label class="block text-sm font-bold text-green-600 mb-1">Soglia Verde (Alto)</label>
+              <label class="block text-sm font-bold text-green-700 mb-1">Soglia Verde (Alto)</label>
               <p class="text-xs text-gray-500 mb-2">Voti uguali o superiori saranno verdi.</p>
               <input type="number" v-model="form.rgb_soglia_alta" min="18" max="30" class="w-full p-2 rounded border border-gray-300 focus:ring-2 focus:ring-green-200 outline-none">
             </div>
