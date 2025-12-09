@@ -39,5 +39,11 @@ coverage/
 *.sln
 *.sw?
 
+
 # Local System Files
 Thumbs.db
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
