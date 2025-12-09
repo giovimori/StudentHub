@@ -166,4 +166,4 @@ Progetto sviluppato per il corso Ingegneria dei Sistemi Web anno accademico 2025
 
 * **Diego Andruccioli** 
 * **Rei Mici** 
-* **Giacomo Masi** 
+* **Giovanni Morelli** 
