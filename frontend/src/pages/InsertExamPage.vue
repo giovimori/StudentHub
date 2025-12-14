@@ -32,7 +32,7 @@ const submitExams = async () => {
   errorMsg.value = ''
   
   try {
-    // 1. Validazione Dati
+    // 1. VALIDAZIONE DATI
     const payload = []
     for (const row of rows.value) {
       if (!row.nome || !row.voto || !row.data || !row.cfu) {
@@ -51,10 +51,22 @@ const submitExams = async () => {
       })
     }
 
-    // 2. INVIO UNICA RICHIESTA
-    await axios.post('http://localhost:3000/api/exams', payload, { 
+    // 2. INVIO RICHIESTA
+    const response = await axios.post('http://localhost:3000/api/exams', payload, { 
       withCredentials: true 
     })
+
+    // --- NUOVA LOGICA GESTIONE BADGE ---
+    const nuoviBadge = response.data.nuovi_badge || []
+
+   /* if (nuoviBadge.length > 0) {
+      // Costruiamo un messaggio per l'alert
+      const nomiBadge = nuoviBadge.map(b => b.nome).join(', ')
+      const totaleXpBadge = nuoviBadge.reduce((sum, b) => sum + b.xp_valore, 0)
+      
+      alert(`🎉 COMPLIMENTI! Hai sbloccato ${nuoviBadge.length} nuovi obiettivi:\n\n${nomiBadge}\n\nHai guadagnato +${totaleXpBadge} XP extra!`)
+    } */
+    // -----------------------------------
 
     router.push('/career')
 
