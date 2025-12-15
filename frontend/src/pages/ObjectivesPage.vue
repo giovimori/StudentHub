@@ -139,7 +139,7 @@ onMounted(() => {
 
                 <div class="w-24 text-right">
                   <span class="inline-block px-3 py-1 rounded-full text-xs font-bold"
-                        :class="obj.sbloccato ? 'bg-yellow-100 text-yellow-700 border border-yellow-200' : 'bg-gray-200 text-gray-500'">
+                        :class="obj.sbloccato ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-gray-200 text-gray-500'">
                     +{{ obj.xp_valore }} xp
                   </span>
                 </div>
