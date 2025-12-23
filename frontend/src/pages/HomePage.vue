@@ -62,10 +62,10 @@ onMounted(async () => {
             class="absolute top-1/2 transform -translate-y-1/2 z-10 transition-all duration-1000 ease-out"
             :style="{ left: `calc(${progressWidth} - 22px)` }"
           >
-             <svg width="44" height="44" viewBox="0 0 24 24" fill="#ef4444" stroke="#151e2b" stroke-width="2" class="drop-shadow-md">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-             </svg>
-          </div>
+          <svg width="70" height="70" viewBox="0 0 24 24" fill="#f8f9fa" stroke="#151e2b" stroke-width="2" class="drop-shadow-md">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
           
           <div 
             class="h-full bg-[#3b76ad] border-r-4 border-[#151e2b] transition-all duration-1000 ease-out"
