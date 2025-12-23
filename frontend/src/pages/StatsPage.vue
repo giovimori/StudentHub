@@ -63,8 +63,7 @@ const chartOptions = {
     x: {
       grid: { display: false },
       ticks: { 
-        maxRotation: 45, 
-        minRotation: 0,
+        display: false // Nascondi etichette asse X (Nomi esami)
       }
     }
   }
@@ -174,7 +173,7 @@ onMounted(async () => {
         <div class="bg-white border-2 border-black rounded-2xl p-6 shadow-md">
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-[#151e2b]">Andamento Carriera</h2>
-            <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Ultimi esami</span>
+            <!-- Badge rimosso come richiesto -->
           </div>
           
           <div class="h-80 w-full relative">
