@@ -1,45 +1,146 @@
--- =======================================================
--- DATI INIZIALI (SEEDING)
--- =======================================================
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Creato il: Dic 23, 2025 alle 10:30
+-- Versione del server: 10.4.32-MariaDB
+-- Versione PHP: 8.2.12
 
--- Popolamento della tabella livelli (Esempio)
-INSERT INTO livelli (numero, nome, descrizione, xp_min, xp_max) VALUES 
-(1, 'Matricola Dispersa', 'Hai appena iniziato il tuo viaggio.', 0, 99),
-(2, 'Studente Attento', 'Inizi a capire come funziona.', 100, 499),
-(3, 'Veterano degli Appunti', 'Sai sempre dove trovare le dispense.', 500, 999),
-(4, 'Maestro dei CFU', 'I crediti non hanno segreti per te.', 1000, 2499),
-(5, 'Laureando Leggendario', 'La corona d\'alloro è vicina.', 2500, NULL);
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
--- Popolamento iniziale Obiettivi (Esempio)
-INSERT INTO obiettivi (nome, descrizione, xp_valore) VALUES 
-('Primo Passo', 'Registra il tuo primo esame superato', 50),
-('Secchione', 'Ottieni la tua prima Lode', 100),
-('Maratoneta', 'Supera 3 esami in un mese', 150),
-('Giro di Boa', 'Raggiungi 90 CFU', 200);
 
--- Pulisce la tabella esami per evitare duplicati se lanci lo script più volte (Opzionale)
--- TRUNCATE TABLE esami; 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-INSERT INTO esami (id_utente, nome, voto, lode, cfu, data, xp_guadagnati) VALUES 
--- Primo Anno - Sessione Invernale
-(1, 'Analisi Matematica T-1', 24, 0, 9, '2023-01-20', 216),
-(1, 'Fondamenti di Informatica T-1', 28, 0, 12, '2023-02-15', 336),
+--
+-- Database: `studenthub_db`
+--
 
--- Primo Anno - Sessione Estiva
-(1, 'Architettura degli Elaboratori', 18, 0, 6, '2023-06-14', 108),
-(1, 'Algebra e Geometria', 21, 0, 6, '2023-07-03', 126),
+-- --------------------------------------------------------
 
--- Primo Anno - Sessione Autunnale (Il recupero dello studente medio)
-(1, 'Fisica Generale T', 20, 0, 6, '2023-09-12', 120),
+--
+-- Struttura della tabella `esami`
+--
 
--- Secondo Anno - Sessione Invernale
-(1, 'Algoritmi e Strutture Dati', 27, 0, 9, '2024-01-25', 243),
-(1, 'Sistemi Operativi', 30, 0, 9, '2024-02-10', 270),
+--
+-- Dump dei dati per la tabella `esami`
+--
 
--- Secondo Anno - Sessione Estiva
-(1, 'Basi di Dati', 30, 1, 9, '2024-06-20', 320), -- 30 e Lode! (Bonus XP simulato)
-(1, 'Reti di Calcolatori', 25, 0, 9, '2024-07-15', 225),
+INSERT INTO `esami` (`id`, `id_utente`, `nome`, `voto`, `lode`, `cfu`, `data`, `xp_guadagnati`, `created_at`) VALUES
+(1, 1, 'BASI DI DATI', 23, 0, 6, '2025-06-11', 0, '2025-12-23 09:11:59'),
+(2, 1, 'ELEMENTI DI MATEMATICA PER L\'INFORMATICA', 18, 0, 6, '2025-01-20', 0, '2025-12-23 09:11:59'),
+(3, 1, 'FONDAMENTI DI SISTEMI WEB', 27, 0, 6, '2025-06-16', 0, '2025-12-23 09:11:59'),
+(4, 1, 'PROGRAMMAZIONE', 28, 0, 9, '2025-01-27', 0, '2025-12-23 09:11:59'),
+(5, 1, 'RETI DI CALCOLATORI E PROGRAMMAZIONE DI RETE', 28, 0, 6, '2025-01-10', 0, '2025-12-23 09:11:59'),
+(6, 1, 'SISTEMI VIRTUALIZZATI', 27, 0, 6, '2025-09-02', 0, '2025-12-23 09:11:59'),
+(7, 1, 'SPERIMENTAZIONE FISICA, ELETTRONICA E SENSORISTICA PER INFORMATICA', 26, 0, 6, '2025-06-27', 0, '2025-12-23 09:11:59'),
+(8, 2, 'BASI DI DATI', 30, 1, 6, '2025-06-11', 0, '2025-12-23 09:19:28'),
+(9, 2, 'ELEMENTI DI ARCHITETTURE DEGLI ELABORATORI E SISTEMI OPERATIVI', 29, 0, 6, '2025-01-15', 0, '2025-12-23 09:19:28'),
+(10, 2, 'ELEMENTI DI MATEMATICA PER L\'INFORMATICA', 28, 0, 6, '2025-01-20', 0, '2025-12-23 09:19:28'),
+(11, 2, 'FONDAMENTI DI SISTEMI WEB', 30, 0, 6, '2025-06-16', 0, '2025-12-23 09:19:28'),
+(12, 2, 'PROGRAMMAZIONE', 30, 0, 9, '2025-01-09', 0, '2025-12-23 09:19:28'),
+(13, 2, 'RETI DI CALCOLATORI E PROGRAMMAZIONE DI RETE', 28, 0, 6, '2025-01-10', 0, '2025-12-23 09:19:28'),
+(14, 2, 'SISTEMI VIRTUALIZZATI', 30, 1, 6, '2025-06-12', 0, '2025-12-23 09:19:28'),
+(15, 2, 'SPERIMENTAZIONE FISICA, ELETTRONICA E SENSORISTICA PER INFORMATICA', 30, 0, 6, '2025-06-11', 0, '2025-12-23 09:19:28'),
+(16, 2, 'Iot', 22, 0, 6, '2025-12-22', 132, '2025-12-23 09:22:04'),
+(17, 3, 'BASI DI DATI', 30, 1, 6, '2025-06-11', 0, '2025-12-23 09:24:05'),
+(18, 3, 'ELEMENTI DI ARCHITETTURE DEGLI ELABORATORI E SISTEMI OPERATIVI', 27, 0, 6, '2025-01-30', 0, '2025-12-23 09:24:05'),
+(19, 3, 'ELEMENTI DI MATEMATICA PER L\'INFORMATICA', 30, 0, 6, '2025-01-29', 0, '2025-12-23 09:24:05'),
+(20, 3, 'FONDAMENTI DI SISTEMI WEB', 28, 0, 6, '2025-06-16', 0, '2025-12-23 09:24:05'),
+(21, 3, 'PROGRAMMAZIONE', 24, 0, 9, '2025-01-09', 0, '2025-12-23 09:24:05'),
+(22, 3, 'RETI DI CALCOLATORI E PROGRAMMAZIONE DI RETE', 28, 0, 6, '2025-01-10', 0, '2025-12-23 09:24:05'),
+(23, 3, 'SISTEMI VIRTUALIZZATI', 25, 0, 6, '2025-06-26', 0, '2025-12-23 09:24:05'),
+(24, 3, 'SPERIMENTAZIONE FISICA, ELETTRONICA E SENSORISTICA PER INFORMATICA', 23, 0, 6, '2025-06-11', 0, '2025-12-23 09:24:05');
 
--- Terzo Anno (Attuale) - Sessione Invernale
-(1, 'Ingegneria del Software', 29, 0, 9, '2025-01-18', 261),
-(1, 'Tecnologie Web', 26, 0, 6, '2025-02-05', 156);
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `impostazioni_utente`
+--
+
+--
+-- Dump dei dati per la tabella `impostazioni_utente`
+--
+
+INSERT INTO `impostazioni_utente` (`id_utente`, `tema_voti`, `rgb_soglia_bassa`, `rgb_soglia_alta`) VALUES
+(1, 'DEFAULT', 18, 27),
+(2, 'DEFAULT', 18, 27),
+(3, 'DEFAULT', 18, 27),
+(4, 'DEFAULT', 18, 27),
+(5, 'DEFAULT', 18, 27);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `livelli`
+--
+
+
+--
+-- Dump dei dati per la tabella `livelli`
+--
+
+INSERT INTO `livelli` (`id`, `numero`, `nome`, `descrizione`, `xp_min`, `xp_max`) VALUES
+(1, 1, 'Matricola Dispersa', 'Hai appena iniziato il tuo viaggio.', 0, 499),
+(2, 2, 'Studente Attento', 'Inizi a capire come funziona.', 500, 1499),
+(3, 3, 'Veterano degli Appunti', 'Sai sempre dove trovare le dispense.', 1500, 2999),
+(4, 4, 'Maestro dei CFU', 'I crediti non hanno segreti per te.', 3000, 4499),
+(5, 5, 'Laureando Leggendario', 'La corona d\'alloro è vicina.', 4500, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `obiettivi`
+--
+
+--
+-- Dump dei dati per la tabella `obiettivi`
+--
+
+INSERT INTO `obiettivi` (`id`, `nome`, `descrizione`, `xp_valore`) VALUES
+(1, 'Primo Passo', 'Registra il tuo primo esame superato', 150),
+(2, 'Secchione', 'Ottieni la tua prima Lode', 300),
+(3, 'Maratoneta', 'Supera 3 esami in un mese', 500),
+(4, 'Giro di Boa', 'Raggiungi 90 CFU', 800);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `obiettivi_sbloccati`
+--
+
+--
+-- Dump dei dati per la tabella `obiettivi_sbloccati`
+--
+
+INSERT INTO `obiettivi_sbloccati` (`id_utente`, `id_obiettivo`, `data_conseguimento`) VALUES
+(2, 1, '2025-12-23'),
+(2, 2, '2025-12-23'),
+(2, 3, '2025-12-23');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `utenti`
+--
+
+
+--
+-- Dump dei dati per la tabella `utenti`
+--
+
+INSERT INTO `utenti` (`id`, `email`, `password`, `nome`, `cognome`, `ruolo`, `xp_totali`, `created_at`) VALUES
+(1, 'reimici@studenthub.com', '$2b$10$2rbNJdYx5AMHHpZj.StUjOTU.TJn9wwEZATMUTlqKP2Gl5s5XUs5W', 'Rei', 'Mici', '0', 0, '2025-12-23 09:02:23'),
+(2, 'diegoandruccioli@studenthub.com', '$2b$10$Y/obgEJCf5SkKBp04gaTzu5u9RX/37uYyp.GmWeTReBBLLepnu4by', 'Diego', 'Andruccioli', '0', 432, '2025-12-23 09:02:47'),
+(3, 'giovannimorelli@studenthub.com', '$2b$10$bvhAk.X0gnMSbWVvy41wweyAY0qz0j/A0SSUKkF42p.n5Kf1AQuZO', 'Giovanni', 'Morelli', '0', 0, '2025-12-23 09:03:04'),
+(4, 'superadmin@studenthub.com', '$2b$10$9Rym/JIL9X.GybLomU7YvOhZLSu.qft9.zQBpk70TOY8Dfphu0ZYG', 'SuperAdmin', 'SuperAdmin', '2', 0, '2025-12-23 09:03:46'),
+(5, 'admin@studenthub.com', '$2b$10$coQ56ySY1TjNTYhfU6oc3.i9fqkBtRBD5.41nJeUe659P22WXY4yC', 'Admin', 'Admin', '1', 0, '2025-12-23 09:04:00');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
