@@ -3,12 +3,125 @@ import NavBar from '../components/NavBar.vue'
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+
 
 const router = useRouter()
+const authStore = useAuthStore()
+const isAdminSuper = computed(() => authStore.user?.ruolo === '2')
+
 const users = ref([])
 const loading = ref(true)
+const actionLoading = ref(false)
 const errorMessage = ref('')
+const successMessage = ref('')
 const searchQuery = ref('')
+
+const activeDropdownId = ref(null)
+
+// --- MODAL STATE ---
+const showModal = ref(false)
+const modalTitle = ref('')
+const modalMessage = ref('')
+const pendingAction = ref(null)
+
+const openConfirmModal = (title, message, action) => {
+    modalTitle.value = title
+    modalMessage.value = message
+    pendingAction.value = action
+    showModal.value = true
+    closeDropdowns()
+}
+
+const closeModal = () => {
+    showModal.value = false
+    pendingAction.value = null
+}
+
+const confirmAction = async () => {
+    if (pendingAction.value) {
+        await pendingAction.value()
+    }
+    closeModal()
+}
+
+// Chiude il dropdown se si clicca fuori
+const closeDropdowns = () => {
+    activeDropdownId.value = null
+}
+
+const toggleDropdown = (id, event) => {
+    event.stopPropagation()
+    if (activeDropdownId.value === id) {
+        activeDropdownId.value = null
+    } else {
+        activeDropdownId.value = id
+    }
+}
+
+// --- AZIONI SUPER ADMIN ---
+const updateUserRole = async (userId, currentRole) => {
+    // Se è Studente (0) diventa Admin (1), se Admin (1) diventa Studente (0)
+    const newRole = currentRole === '0' ? '1' : '0'
+    const actionName = newRole === '1' ? 'promozione' : 'retrocessione'
+
+    // Sostituto di confirm()
+    openConfirmModal(
+        `Conferma ${actionName}`,
+        `Sei sicuro di voler procedere con la ${actionName} dell'utente?`,
+        async () => {
+             actionLoading.value = true
+             try {
+                await axios.put(`http://localhost:3000/api/admin/users/${userId}/role`, 
+                    { nuovo_ruolo: newRole },
+                    { withCredentials: true }
+                )
+                
+                // Aggiorna lista locale
+                const userIndex = users.value.findIndex(u => u.id === userId)
+                if (userIndex !== -1) {
+                    users.value[userIndex].ruolo = newRole
+                }
+                successMessage.value = `Ruolo aggiornato con successo.`
+                setTimeout(() => successMessage.value = '', 3000)
+
+            } catch (error) {
+                console.error("Errore cambio ruolo:", error)
+                errorMessage.value = error.response?.data?.message || "Errore durante l'operazione"
+                setTimeout(() => errorMessage.value = '', 5000)
+            } finally {
+                actionLoading.value = false
+            }
+        }
+    )
+}
+
+const deleteUser = async (userId) => {
+    openConfirmModal(
+        "Elimina Account",
+        "Sei sicuro di voler ELIMINARE definitivamente questo account Admin? L'azione è irreversibile.",
+        async () => {
+             actionLoading.value = true
+             try {
+                await axios.delete(`http://localhost:3000/api/admin/users/${userId}`, { 
+                    withCredentials: true 
+                })
+                
+                // Rimuovi dalla lista locale
+                users.value = users.value.filter(u => u.id !== userId)
+                successMessage.value = "Account eliminato correttamente."
+                setTimeout(() => successMessage.value = '', 3000)
+
+            } catch (error) {
+                console.error("Errore cancellazione:", error)
+                errorMessage.value = error.response?.data?.message || "Errore durante Cancellazione"
+                setTimeout(() => errorMessage.value = '', 5000)
+            } finally {
+                actionLoading.value = false
+            }
+        }
+    )
+}
 
 // --- COMPUTED PROPERTIES PER LE STATISTICHE ---
 // Calcoliamo i totali in tempo reale basandoci sui dati scaricati
@@ -65,7 +178,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans">
+  <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans" @click="closeDropdowns">
     
     <NavBar />
 
@@ -109,7 +222,16 @@ onMounted(async () => {
         </div>
       </div>
 
+      <div v-if="successMessage" class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg shadow-sm mb-8 animate-fade-in-down">
+        <div class="flex items-center">
+          <svg class="h-6 w-6 text-green-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <p class="text-green-700 font-bold">{{ successMessage }}</p>
+        </div>
+      </div>
+
       <div v-else>
+      
+
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
@@ -150,10 +272,11 @@ onMounted(async () => {
                 <tr class="bg-[#151e2b] text-white text-xs uppercase tracking-wider">
                   <th class="p-4 font-semibold rounded-tl-lg">ID</th>
                   <th class="p-4 font-semibold">Utente</th>
-                  <th class="p-4 font-semibold">Email</th>
+
                   <th class="p-4 font-semibold text-center">Ruolo</th>
                   <th class="p-4 font-semibold text-center">XP Totali</th>
-                  <th class="p-4 font-semibold text-right rounded-tr-lg">Iscrizione</th>
+                  <th class="p-4 font-semibold text-center">Iscrizione</th>
+                  <th v-if="isAdminSuper" class="p-4 font-semibold text-center rounded-tr-lg">Azioni</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100">
@@ -168,7 +291,7 @@ onMounted(async () => {
                     <div class="font-bold text-gray-800">{{ user.nome }} {{ user.cognome }}</div>
                   </td>
                   
-                  <td class="p-4 text-sm text-gray-600 font-medium">{{ user.email }}</td>
+
                   
                   <td class="p-4 text-center">
                     <span 
@@ -183,8 +306,52 @@ onMounted(async () => {
                     {{ user.xp_totali }} XP
                   </td>
                   
-                  <td class="p-4 text-right text-gray-500 text-sm">
+                  <td class="p-4 text-center text-gray-500 text-sm">
                     {{ formatDate(user.created_at) }}
+                  </td>
+                  
+                  <!-- MENU AZIONI (Solo Super Admin) -->
+                  <td v-if="isAdminSuper" class="p-4 text-center relative">
+                    <!-- Non mostriamo azioni per altri Super Admin o se stessi -->
+                    <div v-if="user.ruolo !== '2' && user.id !== authStore.user.id">
+                        <button 
+                            @click="toggleDropdown(user.id, $event)" 
+                            class="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition focus:outline-none"
+                        >
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div 
+                            v-if="activeDropdownId === user.id" 
+                            class="absolute right-0 top-12 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-50 overflow-hidden text-left animate-fade-in"
+                            @click.stop
+                        >
+                            <div class="py-1">
+                                <!-- Promuovi/Retrocedi -->
+                                <button 
+                                    @click="updateUserRole(user.id, user.ruolo)"
+                                    class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#3b76ad] flex items-center gap-2"
+                                >
+                                    <svg v-if="user.ruolo === '0'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
+                                    <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110 18 9 9 0 010-18z"></path></svg>
+                                    {{ user.ruolo === '0' ? 'Promuovi ad Admin' : 'Retrocedi a Studente' }}
+                                </button>
+
+                                <!-- Elimina (Solo per Admin role='1') -->
+                                <button 
+                                    v-if="user.ruolo === '1'"
+                                    @click="deleteUser(user.id)"
+                                    class="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 border-t border-gray-100"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    Elimina Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                   </td>
                 </tr>
                 
@@ -205,6 +372,41 @@ onMounted(async () => {
           * La lista mostra tutti gli utenti registrati nel sistema StudentHub.
         </p>
 
+      </div>
+      
+      <!-- CUSTOM MODAL COMPONENT -->
+      <div v-if="showModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" @click="closeModal"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transform transition-all scale-100">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
+                    <svg class="h-6 w-6 text-[#3b76ad]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg leading-6 font-bold text-gray-900 mb-2">{{ modalTitle }}</h3>
+                <p class="text-sm text-gray-500 mb-6">
+                    {{ modalMessage }}
+                </p>
+            </div>
+            <div class="flex gap-3 justify-center">
+                <button 
+                    @click="closeModal"
+                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition focus:outline-none"
+                >
+                    Annulla
+                </button>
+                <button 
+                    @click="confirmAction"
+                    class="px-4 py-2 bg-[#3b76ad] hover:bg-[#2c5c8f] text-white rounded-lg font-bold shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5 focus:outline-none"
+                >
+                    Conferma
+                </button>
+            </div>
+        </div>
       </div>
 
     </main>

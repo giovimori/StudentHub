@@ -11,7 +11,7 @@ import bcrypt from 'bcrypt';
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
         const query = `
-            SELECT id, nome, cognome, email, ruolo, xp_totali, created_at 
+            SELECT id, nome, cognome, ruolo, xp_totali, created_at 
             FROM utenti 
             ORDER BY created_at DESC
         `;
