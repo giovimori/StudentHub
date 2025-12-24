@@ -8,7 +8,7 @@ const router = useRouter()
 // Funzione logout
 const handleLogout = () => {
   authStore.logout()
-  router.push('/login')
+  router.push('/')
 }
 
 // Funzione per andare alle impostazioni
