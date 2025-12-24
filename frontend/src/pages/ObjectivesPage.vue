@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '../components/NavBar.vue'
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '../api/axios'
 import { useAuthStore } from '../stores/auth'
 
 const authStore = useAuthStore()
@@ -15,9 +15,9 @@ const fetchData = async () => {
   errorMsg.value = ''
   try {
     const [lbRes, allBadgesRes, myBadgesRes] = await Promise.all([
-      axios.get('http://localhost:3000/api/users/leaderboard', { withCredentials: true }),
-      axios.get('http://localhost:3000/api/gamification/badges', { withCredentials: true }),
-      axios.get('http://localhost:3000/api/gamification/my-badges', { withCredentials: true })
+      api.get('/users/leaderboard'),
+      api.get('/gamification/badges'),
+      api.get('/gamification/my-badges')
     ])
 
     leaderboard.value = lbRes.data.leaderboard

@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '../components/NavBar.vue'
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import api from '../api/axios'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
@@ -72,9 +72,8 @@ const updateUserRole = async (userId, currentRole) => {
         async () => {
              actionLoading.value = true
              try {
-                await axios.put(`http://localhost:3000/api/admin/users/${userId}/role`, 
-                    { nuovo_ruolo: newRole },
-                    { withCredentials: true }
+                await api.put(`/admin/users/${userId}/role`, 
+                    { nuovo_ruolo: newRole }
                 )
                 
                 // Aggiorna lista locale
@@ -103,9 +102,7 @@ const deleteUser = async (userId) => {
         async () => {
              actionLoading.value = true
              try {
-                await axios.delete(`http://localhost:3000/api/admin/users/${userId}`, { 
-                    withCredentials: true 
-                })
+                await api.delete(`/admin/users/${userId}`)
                 
                 // Rimuovi dalla lista locale
                 users.value = users.value.filter(u => u.id !== userId)
@@ -159,9 +156,7 @@ const formatDate = (dateString) => {
 onMounted(async () => {
   try {
     // Chiamata all'API Backend che abbiamo verificato esistere
-    const response = await axios.get('http://localhost:3000/api/admin/users', { 
-      withCredentials: true 
-    })
+    const response = await api.get('/admin/users')
     users.value = response.data
   } catch (error) {
     console.error("Errore admin:", error)

@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '../components/NavBar.vue'
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '../api/axios'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -68,9 +68,7 @@ const chartOptions = {
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/stats', { 
-      withCredentials: true 
-    })
+    const response = await api.get('/stats')
     
     const apiData = response.data
 

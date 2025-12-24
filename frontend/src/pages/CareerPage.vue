@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, watch } from 'vue'
-import axios from 'axios'
+import api from '../api/axios'
 import { useSettingsStore } from '../stores/settings'
 
 const router = useRouter()
@@ -95,7 +95,7 @@ const saveExam = async () => {
     }
 
     try {
-        await axios.put(`http://localhost:3000/api/exams/${examToEdit.value.id}`, examToEdit.value, { withCredentials: true });
+        await api.put(`/exams/${examToEdit.value.id}`, examToEdit.value);
         
         showEditModal.value = false;
         successMessage.value = "Esame aggiornato con successo!";
@@ -119,7 +119,7 @@ const deleteExam = async () => {
     if (!examToDeleteId.value) return;
 
     try {
-        await axios.delete(`http://localhost:3000/api/exams/${examToDeleteId.value}`, { withCredentials: true });
+        await api.delete(`/exams/${examToDeleteId.value}`);
         
         // Rimuovi localmente
         exams.value = exams.value.filter(e => e.id !== examToDeleteId.value);
@@ -143,8 +143,7 @@ const navigateToInsert = () => {
 const fetchExams = async () => {
   loading.value = true
   try {
-    const response = await axios.get('http://localhost:3000/api/exams', {
-      withCredentials: true,
+    const response = await api.get('/exams', {
       params: {
         sortBy: filters.value.sortBy,
         order: filters.value.order,

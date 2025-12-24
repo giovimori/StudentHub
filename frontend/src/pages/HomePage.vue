@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import api from '../api/axios'
 
 const router = useRouter()
 
@@ -27,9 +27,7 @@ const progressWidth = computed(() => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/gamification/status', { 
-      withCredentials: true 
-    })
+    const response = await api.get('/gamification/status')
     gamificationData.value = response.data
   } catch (error) {
     console.error("Errore recupero livello:", error)

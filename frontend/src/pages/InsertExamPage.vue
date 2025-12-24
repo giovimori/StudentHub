@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '../api/axios'
 
 const router = useRouter()
 const loading = ref(false)
@@ -65,9 +65,7 @@ const submitExams = async () => {
     }
 
     // 2. INVIO RICHIESTA
-    const response = await axios.post('http://localhost:3000/api/exams', payload, { 
-      withCredentials: true 
-    })
+    const response = await api.post('/exams', payload)
 
     // --- NUOVA LOGICA GESTIONE BADGE ---
     const nuoviBadge = response.data.nuovi_badge || []
