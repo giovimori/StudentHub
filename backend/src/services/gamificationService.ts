@@ -1,6 +1,7 @@
 import { pool } from '../config/db';
 import { RowDataPacket } from 'mysql2';
 import { Livello, ObiettivoSbloccato } from '../types/gamification';
+import { BADGE_RULES, Exam } from '../config/gamificationRules';
 
 export const gamificationService = {
     // --- XP e LIVELLI ---
@@ -69,26 +70,11 @@ export const gamificationService = {
         const [existing] = await connection.query('SELECT id_obiettivo FROM obiettivi_sbloccati WHERE id_utente = ?', [userId]);
         const existingIds = new Set<number>(existing.map((r: any) => r.id_obiettivo));
 
-        // 3. Regole
-        const badgeRules = [
-            { id: 1, check: () => exams.length >= 1 },
-            { id: 2, check: () => exams.some((e: any) => e.lode === 1 || e.lode === true) },
-            { id: 3, check: () => {
-                const byMonth: { [key: string]: number } = {};
-                for (const e of exams) {
-                    const d = new Date(e.data);
-                    const k = `${d.getFullYear()}-${d.getMonth()}`;
-                    byMonth[k] = (byMonth[k] || 0) + 1;
-                    if (byMonth[k] >= 3) return true;
-                }
-                return false;
-            }},
-            { id: 4, check: () => exams.reduce((s: number, e: any) => s + e.cfu, 0) >= 90 }
-        ];
-
-        // 4. Check
-        for (const rule of badgeRules) {
-            const isMet = rule.check();
+        // 3. Regole (Centralizzate in config/gamificationRules.ts)
+        // Iteriamo sulle regole importate invece di definirle qui
+        for (const rule of BADGE_RULES) {
+            // Casting esplicito o adattamento dei dati se necessario, ma qui l'interfaccia Exam corrisponde a quanto atteso
+            const isMet = rule.check(exams as Exam[]);
             const hasBadge = existingIds.has(rule.id);
 
             if (isMet && !hasBadge) {
