@@ -83,8 +83,6 @@ CREATE TABLE IF NOT EXISTS impostazioni_utente (
     FOREIGN KEY (id_utente) REFERENCES utenti(id) ON DELETE CASCADE
 );
     
----
-
 -- 8. Creazione del Trigger per l'inserimento automatico
 -- Usiamo il DELIMITER per dire a MySQL dove finisce il blocco di codice del trigger
 DELIMITER //
