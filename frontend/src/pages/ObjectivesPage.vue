@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import api from '../api/axios'
 import { useAuthStore } from '../stores/auth'
 import type { User, Badge } from '../types'
+import IconCheck from '../components/icons/IconCheck.vue'
 
 const authStore = useAuthStore()
 const loading = ref(true)
@@ -129,8 +130,9 @@ onMounted(() => {
                 class="flex items-center p-4 transition"
                 :class="obj.sbloccato ? 'bg-white' : 'bg-gray-50 opacity-70'"
               >
-                <div class="w-10 text-center font-bold text-2xl" :class="obj.sbloccato ? 'text-green-500' : 'text-gray-300'">
-                  {{ obj.sbloccato ? '✔' : obj.id }}
+                <div class="w-10 h-10 flex items-center justify-center font-bold text-2xl" :class="obj.sbloccato ? 'text-green-500' : 'text-gray-300'">
+                  <IconCheck v-if="obj.sbloccato" class="w-6 h-6" />
+                  <span v-else>{{ obj.id }}</span>
                 </div>
 
                 <div class="flex-grow pl-4">
