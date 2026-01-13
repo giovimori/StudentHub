@@ -3,7 +3,8 @@ import NavBar from '../components/NavBar.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axios'
-
+import IconTrash from '../components/icons/IconTrash.vue'
+import IconPlusCircle from '../components/icons/IconPlusCircle.vue'
 interface ExamRow {
   nome: string;
   voto: string | number;
@@ -145,9 +146,7 @@ const submitExams = async () => {
                 class="text-gray-400 hover:text-red-600 transition p-2 rounded-full hover:bg-red-50"
                 title="Elimina riga"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                <IconTrash class="h-5 w-5 md:h-6 md:w-6" />
               </button>
             </div>
 
@@ -180,9 +179,7 @@ const submitExams = async () => {
                 class="absolute -right-3 md:-right-8 text-primary hover:text-primary-dark transition transform hover:scale-110 bg-white rounded-full z-50 shadow-sm"
                 title="Aggiungi riga"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                </svg>
+                <IconPlusCircle class="h-8 w-8 md:h-10 md:w-10" />
               </button>
             </div>
 

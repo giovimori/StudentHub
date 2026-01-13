@@ -4,6 +4,10 @@ import { useRouter } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
 import api from '../api/axios'
 import type { GamificationStatus } from '../types'
+import IconBookOpen from '../components/icons/IconBookOpen.vue'
+import IconDocumentText from '../components/icons/IconDocumentText.vue'
+import IconChartBar from '../components/icons/IconChartBar.vue'
+import IconTrophy from '../components/icons/IconTrophy.vue'
 
 const router = useRouter()
 
@@ -60,9 +64,7 @@ onMounted(async () => {
             class="absolute top-1/2 transform -translate-y-1/2 z-10 transition-all duration-1000 ease-out"
             :style="{ left: `calc(${progressWidth} - 22px)` }"
           >
-          <svg width="70" height="70" viewBox="0 0 24 24" fill="#f8f9fa" stroke="#151e2b" stroke-width="2" class="drop-shadow-md">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
+          <IconBookOpen width="70" height="70" class="drop-shadow-md" />
         </div>
           
           <div 
@@ -86,27 +88,21 @@ onMounted(async () => {
         
         <div @click="router.push('/career')" class="flex flex-col items-center group cursor-pointer">
           <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-secondary bg-primary flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary-dark">
-            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+            <IconDocumentText class="w-16 h-16 text-white" />
           </div>
           <h2 class="mt-4 text-2xl font-bold text-secondary group-hover:text-primary transition">Carriera</h2>
         </div>
 
         <div @click="router.push('/stats')" class="flex flex-col items-center group cursor-pointer">
           <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-secondary bg-primary flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary-dark">
-            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+            <IconChartBar class="w-16 h-16 text-white" />
           </div>
           <h2 class="mt-4 text-2xl font-bold text-secondary group-hover:text-primary transition">Statistiche</h2>
         </div>
 
         <div @click="router.push('/objectives')" class="flex flex-col items-center group cursor-pointer">
           <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-secondary bg-primary flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300 group-hover:bg-primary-dark">
-            <svg class="w-20 h-16 text-white" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
-            </svg>
+            <IconTrophy class="w-20 h-16 text-white" />
           </div>
           <h2 class="mt-4 text-2xl font-bold text-secondary group-hover:text-primary transition">Obiettivi</h2>
         </div>

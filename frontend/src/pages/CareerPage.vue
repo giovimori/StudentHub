@@ -5,6 +5,11 @@ import { ref, onMounted, watch } from 'vue'
 import api from '../api/axios'
 import { useSettingsStore } from '../stores/settings'
 import type { Exam } from '../types'
+import IconDotsHorizontal from '../components/icons/IconDotsHorizontal.vue'
+import IconPencil from '../components/icons/IconPencil.vue'
+import IconTrash from '../components/icons/IconTrash.vue'
+import IconCalendar from '../components/icons/IconCalendar.vue'
+import IconCheckCircle from '../components/icons/IconCheckCircle.vue'
 
 const router = useRouter()
 const settingsStore = useSettingsStore()
@@ -215,9 +220,7 @@ onMounted(async () => {
       <div v-if="successMessage" class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm animate-fade-in-down">
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-              </svg>
+              <IconCheckCircle class="h-5 w-5 text-green-400" />
             </div>
             <div class="ml-3">
               <p class="text-sm leading-5 font-medium text-green-800">
@@ -289,9 +292,7 @@ onMounted(async () => {
                   @click="toggleDropdown(exam.id, $event)" 
                   class="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition focus:outline-none bg-white/90 backdrop-blur-sm border border-gray-100 shadow-sm"
               >
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                  </svg>
+                  <IconDotsHorizontal class="w-6 h-6" />
               </button>
 
               <div 
@@ -304,7 +305,7 @@ onMounted(async () => {
                           @click="openEditModal(exam)"
                           class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary flex items-center gap-2"
                       >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                          <IconPencil class="w-4 h-4" />
                           Modifica
                       </button>
 
@@ -312,7 +313,7 @@ onMounted(async () => {
                           @click="confirmDelete(exam.id)"
                           class="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 border-t border-gray-100"
                       >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                          <IconTrash class="w-4 h-4" />
                           Elimina
                       </button>
                   </div>
@@ -336,9 +337,7 @@ onMounted(async () => {
           <div class="flex justify-between items-end mt-4">
             
             <div class="flex items-center gap-2 text-black font-bold text-lg">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+              <IconCalendar class="h-6 w-6 text-gray-600" />
               <span>{{ formatDate(exam.data) }}</span>
             </div>
 
@@ -403,9 +402,7 @@ onMounted(async () => {
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" @click="showDeleteModal = false"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                <IconTrash class="h-6 w-6 text-red-600" />
             </div>
             <h3 class="text-lg font-bold text-gray-900 mb-2">Elimina Esame</h3>
             <p class="text-sm text-gray-500 mb-6">Sei sicuro di voler eliminare questo esame? Questa azione è irreversibile.</p>

@@ -7,6 +7,11 @@ import api from '../api/axios'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import type { User } from '../types'
+import IconExclamation from '../components/icons/IconExclamation.vue'
+import IconCheckMark from '../components/icons/IconCheckMark.vue'
+import IconUsersGroup from '../components/icons/IconUsersGroup.vue'
+import IconAcademicCap from '../components/icons/IconAcademicCap.vue'
+import IconShieldCheck from '../components/icons/IconShieldCheck.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -163,14 +168,14 @@ onMounted(() => {
 
       <div v-else-if="errorMessage" class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg shadow-sm mb-8">
         <div class="flex items-center">
-          <svg class="h-6 w-6 text-red-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <IconExclamation class="h-6 w-6 text-red-500 mr-3" />
           <p class="text-red-700 font-bold">{{ errorMessage }}</p>
         </div>
       </div>
 
       <div v-if="successMessage" class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg shadow-sm mb-8 animate-fade-in-down">
         <div class="flex items-center">
-          <svg class="h-6 w-6 text-green-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <IconCheckMark class="h-6 w-6 text-green-500 mr-3" />
           <p class="text-green-700 font-bold">{{ successMessage }}</p>
         </div>
       </div>
@@ -181,7 +186,7 @@ onMounted(() => {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
             <div class="p-3 bg-blue-50 rounded-full text-primary">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+              <IconUsersGroup class="w-8 h-8" />
             </div>
             <div>
               <p class="text-sm text-gray-500 font-bold uppercase tracking-wider">Utenti Totali</p>
@@ -191,7 +196,7 @@ onMounted(() => {
 
           <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
             <div class="p-3 bg-purple-50 rounded-full text-purple-600">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path></svg>
+              <IconAcademicCap class="w-8 h-8" />
             </div>
             <div>
               <p class="text-sm text-gray-500 font-bold uppercase tracking-wider">Studenti</p>
@@ -201,7 +206,7 @@ onMounted(() => {
 
           <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
             <div class="p-3 bg-green-50 rounded-full text-green-600">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              <IconShieldCheck class="w-8 h-8" />
             </div>
             <div>
               <p class="text-sm text-gray-500 font-bold uppercase tracking-wider">Admin</p>

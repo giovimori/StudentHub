@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import IconLogo from '../components/icons/IconLogo.vue'
+import IconBack from '../components/icons/IconBack.vue'
 
 
 const router = useRouter()
@@ -28,7 +30,7 @@ const handleRegister = async () => {
   if (success) {
     router.push('/home')
   } else {
-    errorMessage.value = authStore.error
+    errorMessage.value = authStore.error || ''
   }
 }
 </script>
@@ -38,10 +40,7 @@ const handleRegister = async () => {
     
     <header class="bg-[#151e2b] text-white py-4 px-8 shadow-md flex items-center">
       <div class="flex items-center gap-3 cursor-pointer" @click="router.push('/')">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-          <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
-        </svg>
+        <IconLogo class="h-10 w-10 text-white" />
         <span class="text-2xl font-bold tracking-wide">StudentHub</span>
       </div>
     </header>
@@ -50,9 +49,7 @@ const handleRegister = async () => {
       
       <div class="mb-6 w-full max-w-md">
         <router-link to="/" class="inline-flex items-center gap-2 text-gray-600 hover:text-[#3b76ad] transition font-bold text-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <IconBack class="h-6 w-6" />
           Torna alla Home
         </router-link>
       </div>
