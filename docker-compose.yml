@@ -1,5 +1,7 @@
+version: '4.2'
+
 services:
-  # Servizio Database MySQL
+  # --- SERVIZIO DATABASE ---
   db:
     image: mysql:8.0
     container_name: studenthub-db
@@ -7,27 +9,28 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: studenthub_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
-      # Import automatico degli script SQL all'avvio
       - ./backend/sql:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
-      timeout: 5s
-      retries: 5
+      timeout: 20s
+      retries: 10
 
-  # Servizio Backend (Node.js/Express)
+  # --- SERVIZIO BACKEND ---
   backend:
     build: ./backend
     container_name: studenthub-backend
     restart: always
     ports:
       - "3000:3000"
+    depends_on:
+      # Aspetta che il DB sia "healthy" prima di partire
+      db:
+        condition: service_healthy
     environment:
       - DB_HOST=db
       - DB_USER=root
@@ -35,18 +38,15 @@ services:
       - DB_NAME=studenthub_db
       - DB_PORT=3306
       - PORT=3000
-    depends_on:
-      db:
-        condition: service_healthy
+      - JWT_SECRET=e1d5b0ac408961e36a35c0a11476e1a9b1bf75a7737d238e3d2aa2ba4efa8bdfb852ad4e34427096724264257ccf12b3e040277af230061c790dd02d0b17984f
 
-  # Servizio Frontend (Vue.js/Vite)
+  # --- SERVIZIO FRONTEND ---
   frontend:
     build: ./frontend
     container_name: studenthub-frontend
+    restart: always
     ports:
       - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:3000
     depends_on:
       - backend
 
