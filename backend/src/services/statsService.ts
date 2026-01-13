@@ -3,7 +3,7 @@ import { RowDataPacket } from 'mysql2';
 
 export const statsService = {
     async calculateStats(userId: number) {
-        // Recupero esami
+
         const [exams] = await pool.query<RowDataPacket[]>(`
             SELECT nome, voto, cfu, data, lode 
             FROM esami 
@@ -11,7 +11,7 @@ export const statsService = {
             ORDER BY data ASC
         `, [userId]);
 
-        // Caso base: Studente senza esami
+
         if (exams.length === 0) {
             return {
                 mediaAritmetica: 0,

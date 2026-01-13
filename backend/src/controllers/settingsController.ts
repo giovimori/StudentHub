@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { settingsService } from '../services/settingsService';
 
-// GET: Impostazioni
 export const getSettings = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ message: 'Non autenticato' });
@@ -15,7 +14,6 @@ export const getSettings = async (req: Request, res: Response) => {
     }
 };
 
-// PUT: Aggiorna impostazioni
 export const updateSettings = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ message: 'Non autenticato' });

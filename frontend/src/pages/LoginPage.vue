@@ -14,11 +14,11 @@ const errorMessage = ref('')
 const handleLogin = async () => {
   errorMessage.value = ''
   
-  // Chiama l'azione login dello store
+
   const success = await authStore.login(email.value, password.value)
   
   if (success) {
-    // CONTROLLO RUOLO: Se Admin/SuperAdmin vai su /admin, altrimenti /home
+    // Reindirizzamento basato sul ruolo
     const role = authStore.user?.ruolo
     if (role === '1' || role === '2') {
       router.push('/admin')

@@ -23,7 +23,7 @@ import TermsPage from "../pages/TermsPage.vue";
 const AdminPage = () => import("../pages/AdminPage.vue");
 
 const routes: Array<RouteRecordRaw> = [
-  // 1. ROTTE GUEST (Solo per non loggati -> Redirect a Home se loggato)
+
   {
     path: "/",
     name: "Landing",
@@ -43,7 +43,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: { guest: true },
   },
 
-  // 2. ROTTE PROTETTE (Solo per loggati -> Redirect a Login se non loggato)
+
   {
     path: "/home",
     name: "Home",
@@ -87,9 +87,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true },
   },
 
-  // 3. PAGINE PUBBLICHE (Accessibili a TUTTI)
-  // Nota: Non mettiamo né 'guest' né 'requiresAuth'.
-  // Il router le lascerà passare sempre (Logica "else" nel guard).
+
   { path: "/about", name: "About", component: AboutPage },
   { path: "/contact", name: "Contact", component: ContactPage },
   { path: "/privacy", name: "Privacy", component: PrivacyPage },
@@ -103,7 +101,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true, requiresAdmin: true }, // <-- NUOVO CHECK RUOLO
   },
 
-  // 4. Catch-all (Pagina non trovata)
+
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
@@ -116,18 +114,18 @@ const router = createRouter({
 });
 
 // --- NAVIGATION GUARD ---
-// --- NAVIGATION GUARD ---
+
 router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.isAuthenticated;
   const userRole = authStore.user?.ruolo; // '0', '1', '2'
 
-  // CASO A: Rotta protetta e utente NON loggato -> Login
+
   if (to.meta.requiresAuth && !isAuthenticated) {
     return next("/login");
   }
 
-  // CASO B: Rotta Guest (Login/Register) e utente GIÀ loggato -> Redirect intelligente
+
   else if (to.meta.guest && isAuthenticated) {
     // Se è Admin (1) o SuperAdmin (2), vai alla dashboard admin
     if (userRole === "1" || userRole === "2") {
@@ -137,7 +135,7 @@ router.beforeEach((to, _from, next) => {
     return next("/home");
   }
 
-  // CASO C: Controllo Accesso Admin (Protezione Rotta /admin)
+
   if (to.meta.requiresAdmin && isAuthenticated) {
     // Se uno studente ('0') prova ad entrare in /admin -> Bloccalo
     if (userRole === "0") {
@@ -145,8 +143,7 @@ router.beforeEach((to, _from, next) => {
     }
   }
 
-  // CASO EXTRA: Admin non devono accedere alle pagine Studenti (Es. Home, Career, etc.)
-  // L'utente ha specificato che gli Admin devono vedere SOLO la Dashboard Admin.
+
   if (isAuthenticated && (userRole === "1" || userRole === "2")) {
     const studentRoutes = [
       "Home",
@@ -161,7 +158,7 @@ router.beforeEach((to, _from, next) => {
     }
   }
 
-  // CASO D: Procedi
+
   next();
 });
 

@@ -1,8 +1,8 @@
--- 1. Creazione e Selezione del Database
+
 CREATE DATABASE IF NOT EXISTS studenthub_db;
 USE studenthub_db;
 
--- 2. Creazione Tabella Utenti
+
 CREATE TABLE IF NOT EXISTS utenti (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS utenti (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Creazione Tabella Livelli
+
 CREATE TABLE IF NOT EXISTS livelli (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero INT NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS livelli (
     xp_max INT NULL
 );
 
--- 4. Creazione Tabella Esami
+
 CREATE TABLE IF NOT EXISTS esami (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_utente INT NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS esami (
     FOREIGN KEY (id_utente) REFERENCES utenti(id) ON DELETE CASCADE
 );
 
--- 5. Creazione Tabella Obiettivi
+
 CREATE TABLE IF NOT EXISTS obiettivi (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS obiettivi (
     xp_valore INT NOT NULL
 );
 
--- 6. Creazione Tabella Obiettivi Sbloccati
+
 CREATE TABLE IF NOT EXISTS obiettivi_sbloccati (
     id_utente INT NOT NULL,
     id_obiettivo INT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS obiettivi_sbloccati (
     FOREIGN KEY (id_obiettivo) REFERENCES obiettivi(id) ON DELETE CASCADE
 );
 
--- 7. Creazione Tabella Impostazioni Utente
+
 CREATE TABLE IF NOT EXISTS impostazioni_utente (
     id_utente INT PRIMARY KEY,
     tema_voti ENUM('DEFAULT', 'RGB') NOT NULL DEFAULT 'DEFAULT',

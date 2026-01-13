@@ -102,7 +102,6 @@ defineExpose({ closeDropdowns })
                     {{ formatDate(user.created_at) }}
                     </td>
                     
-                    <!-- MENU AZIONI (Solo Super Admin) -->
                     <td v-if="isAdminSuper" class="p-4 text-center relative">
                     <!-- Non mostriamo azioni per altri Super Admin o se stessi -->
                     <div v-if="user.ruolo !== UserRole.SUPER_ADMIN && user.id !== authStore.user?.id">
@@ -123,7 +122,7 @@ defineExpose({ closeDropdowns })
                             @click.stop
                         >
                             <div class="py-1">
-                                <!-- Promuovi/Retrocedi -->
+
                                 <button 
                                     @click="$emit('update-role', user, user.ruolo === UserRole.STUDENT ? UserRole.ADMIN : UserRole.STUDENT); closeDropdowns()"
                                     class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-primary flex items-center gap-2 focus:outline-none focus:bg-blue-50"
@@ -133,7 +132,7 @@ defineExpose({ closeDropdowns })
                                     {{ user.ruolo === UserRole.STUDENT ? 'Promuovi ad Admin' : 'Retrocedi a Studente' }}
                                 </button>
 
-                                <!-- Elimina (Solo per Admin role='1') -->
+
                                 <button 
                                     v-if="user.ruolo === UserRole.ADMIN"
                                     @click="$emit('delete-user', user); closeDropdowns()"

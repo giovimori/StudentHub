@@ -8,15 +8,9 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
 -- Database: `studenthub_db`
---
 
--- --------------------------------------------------------
-
---
 -- Pulizia delle tabelle esistenti prima dell'inserimento
---
 SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM obiettivi_sbloccati;
 DELETE FROM esami;
@@ -26,25 +20,15 @@ DELETE FROM livelli;
 DELETE FROM utenti;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- --------------------------------------------------------
-
---
 -- Dump dei dati per la tabella `utenti`
---
-
 INSERT INTO `utenti` (`id`, `email`, `password`, `nome`, `cognome`, `ruolo`, `xp_totali`, `created_at`) VALUES
-(1, 'reimici@studenthub.com', '$2b$10$2rbNJdYx5AMHHpZj.StUjOTU.TJn9wwEZATMUTlqKP2Gl5s5XUs5W', 'Rei', 'Mici', '0', 1796, '2025-12-23 09:02:23'),
-(2, 'diegoandruccioli@studenthub.com', '$2b$10$Y/obgEJCf5SkKBp04gaTzu5u9RX/37uYyp.GmWeTReBBLLepnu4by', 'Diego', 'Andruccioli', '0', 2682, '2025-12-23 09:02:47'),
-(3, 'giovannimorelli@studenthub.com', '$2b$10$bvhAk.X0gnMSbWVvy41wweyAY0qz0j/A0SSUKkF42p.n5Kf1AQuZO', 'Giovanni', 'Morelli', '0', 2362, '2025-12-23 09:03:04'),
-(4, 'superadmin@studenthub.com', '$2b$10$9Rym/JIL9X.GybLomU7YvOhZLSu.qft9.zQBpk70TOY8Dfphu0ZYG', 'SuperAdmin', 'SuperAdmin', '2', 0, '2025-12-23 09:03:46'),
-(5, 'admin@studenthub.com', '$2b$10$coQ56ySY1TjNTYhfU6oc3.i9fqkBtRBD5.41nJeUe659P22WXY4yC', 'Admin', 'Admin', '1', 0, '2025-12-23 09:04:00');
+(1, 'reimici@studenthub.com', '$2b$10$UuWz9YjVnFj1.JpX.kZ2..1.X8.X89X8X8X8X8X8X8X8X8X8X8X8', 'Rei', 'Mici', '0', 1796, '2025-12-23 09:02:23'),
+(2, 'diegoandruccioli@studenthub.com', '$2b$10$UuWz9YjVnFj1.JpX.kZ2..1.X8.X89X8X8X8X8X8X8X8X8X8X8X8', 'Diego', 'Andruccioli', '0', 2682, '2025-12-23 09:02:47'),
+(3, 'giovannimorelli@studenthub.com', '$2b$10$UuWz9YjVnFj1.JpX.kZ2..1.X8.X89X8X8X8X8X8X8X8X8X8X8X8', 'Giovanni', 'Morelli', '0', 2362, '2025-12-23 09:03:04'),
+(4, 'superadmin@studenthub.com', '$2b$10$UuWz9YjVnFj1.JpX.kZ2..1.X8.X89X8X8X8X8X8X8X8X8X8X8X8', 'SuperAdmin', 'SuperAdmin', '2', 0, '2025-12-23 09:03:46'),
+(5, 'admin@studenthub.com', '$2b$10$UuWz9YjVnFj1.JpX.kZ2..1.X8.X89X8X8X8X8X8X8X8X8X8X8X8', 'Admin', 'Admin', '1', 0, '2025-12-23 09:04:00');
 
--- --------------------------------------------------------
-
---
 -- Dump dei dati per la tabella `livelli`
---
-
 INSERT INTO `livelli` (`id`, `numero`, `nome`, `descrizione`, `xp_min`, `xp_max`) VALUES
 (1, 1, 'Matricola Dispersa', 'Hai appena iniziato il tuo viaggio.', 0, 499),
 (2, 2, 'Studente Attento', 'Inizi a capire come funziona.', 500, 1499),
@@ -52,24 +36,14 @@ INSERT INTO `livelli` (`id`, `numero`, `nome`, `descrizione`, `xp_min`, `xp_max`
 (4, 4, 'Maestro dei CFU', 'I crediti non hanno segreti per te.', 3000, 4499),
 (5, 5, 'Laureando Leggendario', 'La corona d\'alloro è vicina.', 4500, NULL);
 
--- --------------------------------------------------------
-
---
 -- Dump dei dati per la tabella `obiettivi`
---
-
 INSERT INTO `obiettivi` (`id`, `nome`, `descrizione`, `xp_valore`) VALUES
 (1, 'Primo Passo', 'Registra il tuo primo esame superato', 150),
 (2, 'Secchione', 'Ottieni la tua prima Lode', 300),
 (3, 'Maratoneta', 'Supera 3 esami in un mese', 500),
 (4, 'Giro di Boa', 'Raggiungi 90 CFU', 800);
 
--- --------------------------------------------------------
-
---
 -- Dump dei dati per la tabella `esami`
---
-
 INSERT INTO `esami` (`id`, `id_utente`, `nome`, `voto`, `lode`, `cfu`, `data`, `xp_guadagnati`, `created_at`) VALUES
 (1, 1, 'BASI DI DATI', 23, 0, 6, '2025-06-11', 138, '2025-12-23 09:11:59'),
 (2, 1, 'ELEMENTI DI MATEMATICA PER L\'INFORMATICA', 18, 0, 6, '2025-01-20', 108, '2025-12-23 09:11:59'),
@@ -96,12 +70,7 @@ INSERT INTO `esami` (`id`, `id_utente`, `nome`, `voto`, `lode`, `cfu`, `data`, `
 (23, 3, 'SISTEMI VIRTUALIZZATI', 25, 0, 6, '2025-06-26', 150, '2025-12-23 09:24:05'),
 (24, 3, 'SPERIMENTAZIONE FISICA, ELETTRONICA E SENSORISTICA PER INFORMATICA', 23, 0, 6, '2025-06-11', 138, '2025-12-23 09:24:05');
 
--- --------------------------------------------------------
-
---
 -- Dump dei dati per la tabella `obiettivi_sbloccati`
---
-
 INSERT INTO `obiettivi_sbloccati` (`id_utente`, `id_obiettivo`, `data_conseguimento`) VALUES
 (1, 1, '2025-12-23'),
 (1, 3, '2025-12-23'),
@@ -112,12 +81,7 @@ INSERT INTO `obiettivi_sbloccati` (`id_utente`, `id_obiettivo`, `data_conseguime
 (3, 2, '2025-12-23'),
 (3, 3, '2025-12-23');
 
--- --------------------------------------------------------
-
---
 -- Dump dei dati per la tabella `impostazioni_utente`
---
-
 INSERT INTO `impostazioni_utente` (`id_utente`) VALUES
 (1),
 (2),

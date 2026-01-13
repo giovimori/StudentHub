@@ -52,7 +52,7 @@ export const examService = {
                 [totalXp, userId]
             );
 
-            // Sync Badges
+            // Sincronizza badge dopo inserimento
             const { newBadges } = await gamificationService.syncBadges(userId, connection);
 
             await connection.commit();
@@ -71,21 +71,20 @@ export const examService = {
         try {
             const { nome, voto, lode, cfu, data } = examData;
 
-            // 1. Recupera vecchio esame
+            // Recupera vecchio esame per calcolo differenziale XP
             const [oldExams] = await connection.query<RowDataPacket[]>('SELECT * FROM esami WHERE id = ? AND id_utente = ?', [examId, userId]);
             if (oldExams.length === 0) throw new Error('Esame non trovato o non autorizzato');
             
             const oldExam = oldExams[0];
             const oldXp = oldExam.xp_guadagnati;
 
-            // 2. Calcola nuovo XP
+            // Calcola nuovo XP e differenza
             let newXp = voto * cfu;
             if (lode) newXp += 50;
             const xpDifference = newXp - oldXp;
 
             await connection.beginTransaction();
 
-            // 3. Aggiorna DB
             await connection.query(
                 'UPDATE esami SET nome = ?, voto = ?, lode = ?, cfu = ?, data = ?, xp_guadagnati = ? WHERE id = ?',
                 [nome, voto, lode || false, cfu, data, newXp, examId]
@@ -98,7 +97,7 @@ export const examService = {
                 );
             }
 
-            // 4. Sync Badges
+            // Ricalcolo badge post-aggiornamento
             const { newBadges, revokedBadgeIds } = await gamificationService.syncBadges(userId, connection);
 
             await connection.commit();

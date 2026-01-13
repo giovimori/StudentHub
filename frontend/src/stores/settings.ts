@@ -19,11 +19,11 @@ export const useSettingsStore = defineStore("settings", {
       rgb_soglia_bassa: 18,
       rgb_soglia_alta: 27,
     },
-    loaded: false, // Per evitare di ricaricare se abbiamo già i dati
+    loaded: false,
   }),
 
   actions: {
-    // Scarica le impostazioni dal backend
+
     async fetchSettings() {
       if (this.loaded) return;
       try {
@@ -35,7 +35,7 @@ export const useSettingsStore = defineStore("settings", {
       }
     },
 
-    // Aggiorna le impostazioni nel backend e nello store
+
     async updateSettings(newSettings: Partial<Preferences>): Promise<boolean> {
       try {
         await api.put("/settings", newSettings);

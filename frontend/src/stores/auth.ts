@@ -10,7 +10,6 @@ interface AuthState {
 
 export const useAuthStore = defineStore("auth", {
   state: (): AuthState => ({
-    // Il token è nei cookie HttpOnly, qui teniamo solo i dati utente
     user: JSON.parse(localStorage.getItem("user") || "null"),
     loading: false,
     error: null,
@@ -21,15 +20,15 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
-    // LOGIN
+
     async login(email: string, password: string): Promise<boolean> {
       this.loading = true;
       this.error = null;
       try {
-        // Chiamata al backend reale
+
         const response = await api.post("/auth/login", { email, password });
 
-        // Se successo, salva l'utente nello stato
+
         this.user = response.data.user;
         localStorage.setItem("user", JSON.stringify(this.user));
         return true; // Login riuscito
@@ -41,14 +40,14 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    // REGISTER
+
     async register(userData: any): Promise<boolean> {
       this.loading = true;
       this.error = null;
       try {
         const response = await api.post("/auth/register", userData);
 
-        // Auto-login dopo la registrazione
+
         this.user = response.data.user;
         localStorage.setItem("user", JSON.stringify(this.user));
         return true;
@@ -60,7 +59,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    // LOGOUT
+
     async logout(): Promise<void> {
       try {
         await api.post("/auth/logout");
@@ -69,8 +68,7 @@ export const useAuthStore = defineStore("auth", {
       } finally {
         this.user = null;
         localStorage.removeItem("user");
-        // Non forziamo il redirect qui con window.location,
-        // lasciamo che sia il componente a fare router.push('/')
+        // lascia che sia il componente a fare router.push('/')
       }
     },
   },

@@ -29,7 +29,7 @@ export const getStats = async (req: Request, res: Response) => {
         
         const labels: string[] = [];
         const dataPoints: number[] = [];
-        const examNames: string[] = []; // <--- NUOVO ARRAY PER I NOMI
+        const examNames: string[] = [];
 
         const mesi = ['GEN', 'FEB', 'MAR', 'APR', 'MAG', 'GIU', 'LUG', 'AGO', 'SET', 'OTT', 'NOV', 'DIC'];
 
@@ -44,7 +44,7 @@ export const getStats = async (req: Request, res: Response) => {
             
             labels.push(`${giorno} ${mese}`); 
             dataPoints.push(exam.voto);
-            examNames.push(exam.nome); // <--- SALVO IL NOME ESAME
+            examNames.push(exam.nome);
         }
 
         const mediaAritmetica = parseFloat((sommaVoti / exams.length).toFixed(2));
@@ -59,7 +59,7 @@ export const getStats = async (req: Request, res: Response) => {
             chartData: {
                 labels, 
                 data: dataPoints,
-                examNames // <--- LO MANDO AL FRONTEND
+                examNames
             }
         });
 

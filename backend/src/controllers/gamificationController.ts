@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { gamificationService } from '../services/gamificationService';
 
-// --- XP, Livello corrente e progressi dell'utente ---
 export const getGamificationStatus = async (req: Request, res: Response): Promise<void> => {
     try {
         const xpTotali = req.user?.xp_totali || 0;
@@ -13,7 +12,6 @@ export const getGamificationStatus = async (req: Request, res: Response): Promis
     }
 };
 
-// --- Obiettivi sbloccati dall'utente ---
 export const getMyBadges = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = req.user?.id;
@@ -29,7 +27,6 @@ export const getMyBadges = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-// --- Catalogo completo degli obiettivi ---
 export const getAllBadges = async (req: Request, res: Response): Promise<void> => {
     try {
         const allBadges = await gamificationService.getAllBadges();
@@ -40,5 +37,4 @@ export const getAllBadges = async (req: Request, res: Response): Promise<void> =
     }
 };
 
-// Exporting syncBadges from service if needed elsewhere, although services should call service directly
 export const syncBadges = gamificationService.syncBadges; 

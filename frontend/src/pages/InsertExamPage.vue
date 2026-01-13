@@ -20,7 +20,7 @@ const rows = ref<ExamRow[]>([
   { nome: '', voto: '', lode: false, data: '', cfu: '' }
 ])
 
-// Watcher per resettare la lode se il voto non è 30
+
 watch(rows, (newRows) => {
   newRows.forEach(row => {
     if (row.voto != 30 && row.lode) {
@@ -49,7 +49,7 @@ const submitExams = async () => {
   errorMsg.value = ''
   
   try {
-    // 1. VALIDAZIONE DATI
+
     const payload = []
     for (const row of rows.value) {
       if (!row.nome || !row.voto || !row.data || !row.cfu) {
@@ -75,7 +75,7 @@ const submitExams = async () => {
       })
     }
 
-    // 2. INVIO RICHIESTA
+
     await api.post('/exams', payload)
 
     router.push('/career')

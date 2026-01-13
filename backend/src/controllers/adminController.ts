@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { adminService } from '../services/adminService';
 
-// --- GET: FUNZIONALITÀ DI LETTURA (Admin) ---
 
-// Lista utenti
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
         const page = parseInt(req.query.page as string) || 1;
@@ -17,7 +15,7 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-// Statistiche amministrative
+
 export const getAdminStats = async (req: Request, res: Response): Promise<void> => {
     try {
         const stats = await adminService.getAdminStats();
@@ -28,7 +26,7 @@ export const getAdminStats = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-// Classifica globale
+
 export const getGlobalRanking = async (req: Request, res: Response): Promise<void> => {
     try {
         const ranking = await adminService.getGlobalRanking();
@@ -40,9 +38,7 @@ export const getGlobalRanking = async (req: Request, res: Response): Promise<voi
 };
 
 
-// --- WRITE: FUNZIONALITÀ CRITICHE (Solo SuperAdmin) ---
 
-// Aggiorna il ruolo di un utente
 export const updateUserRole = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { nuovo_ruolo } = req.body;
@@ -74,7 +70,7 @@ export const updateUserRole = async (req: Request, res: Response): Promise<void>
     }
 };
 
-// Elimina account Admin
+
 export const deleteAdminAccount = async (req: Request, res: Response): Promise<void> => {
     const userIdToDelete = req.params.id;
 

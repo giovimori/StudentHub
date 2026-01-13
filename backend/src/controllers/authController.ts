@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { sendTokenResponse } from '../utils/jwt';
 import { authService } from '../services/authService';
 
-// --- REGISTRAZIONE ---
 export const register = async (req: Request, res: Response) => {
     try {
         const { nome, cognome, email, password } = req.body;
@@ -23,7 +22,6 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
-// --- LOGIN ---
 export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
@@ -44,7 +42,6 @@ export const login = async (req: Request, res: Response) => {
     }
 };
 
-// --- LOGOUT ---
 export const logout = (req: Request, res: Response) => {
     res.cookie('token', 'none', {
         expires: new Date(Date.now() + 10 * 1000),

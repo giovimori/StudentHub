@@ -14,7 +14,7 @@ const loading = ref(true)
 const errorMessage = ref('')
 const successMessage = ref('')
 
-// --- GESTIONE FILTRI ---
+
 const filters = ref({
   sortBy: 'data',    // data, voto, cfu
   order: 'DESC',     // ASC, DESC
@@ -27,14 +27,14 @@ for (let i = 0; i < 5; i++) {
   availableYears.value.push(currentYear - i)
 }
 
-// --- STATE PER MENU E MODALI ---
+
 const activeDropdownId = ref<number | string | null>(null)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
 const examToEdit = ref<Exam | null>(null)
 const examToDeleteId = ref<number | string | null>(null)
 
-// --- FORMATTAZIONE E COLORI ---
+
 const formatDate = (dateString: string) => {
   if (!dateString) return ''
   const date = new Date(dateString)
@@ -168,10 +168,12 @@ watch(filters, () => {
   fetchExams()
 }, { deep: true })
 
-// Watcher: Se sto modificando e il voto scende sotto 30, tolgo la lode
+// se sto modificando e il voto scende sotto 30, tolgo la lode
 watch(() => examToEdit.value?.voto, (newVal) => {
     if (newVal && newVal < 30 && examToEdit.value?.lode) {
-        examToEdit.value.lode = false; // or 0
+        if (examToEdit.value) {
+            examToEdit.value.lode = false;
+        }
     }
 })
 
@@ -350,7 +352,7 @@ onMounted(async () => {
       </div>
 
       <!-- MODALE MODIFICA -->
-      <div v-if="showEditModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div v-if="showEditModal && examToEdit" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" @click="showEditModal = false"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
             <h3 class="text-2xl font-bold text-primary mb-6">Modifica Esame</h3>

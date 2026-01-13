@@ -33,7 +33,7 @@ const save = async () => {
   saving.value = true
   message.value = ''
   
-  // Validazione rapida
+
   if (form.tema_voti === 'RGB' && form.rgb_soglia_bassa > form.rgb_soglia_alta) {
     message.value = "Errore: La soglia minima non può essere maggiore della massima."
     saving.value = false
@@ -45,7 +45,7 @@ const save = async () => {
   if (success) {
     message.value = "Impostazioni salvate con successo!"
     
-    // --- AZIONE RICHIESTA: REINDIRIZZAMENTO ALLA HOME ---
+
     setTimeout(() => {
         router.push('/home') 
     }, 1000); // Aspetta 1 secondo per far leggere il messaggio di successo

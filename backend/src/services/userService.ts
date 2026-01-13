@@ -3,7 +3,7 @@ import { RowDataPacket } from 'mysql2';
 
 export const userService = {
     async getLeaderboard(userId: number) {
-        // Classifica globale
+
         const [leaderboard] = await pool.query<RowDataPacket[]>(`
             SELECT id, nome, xp_totali 
             FROM utenti 
@@ -12,7 +12,7 @@ export const userService = {
             LIMIT 50
         `);
 
-        // Calcolo posizione utente loggato
+
         const [rankResult] = await pool.query<RowDataPacket[]>(`
             SELECT COUNT(*) + 1 as \`rank\` 
             FROM utenti 

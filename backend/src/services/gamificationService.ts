@@ -4,7 +4,7 @@ import { Livello, ObiettivoSbloccato } from '../types/gamification';
 import { BADGE_RULES, Exam } from '../config/gamificationRules';
 
 export const gamificationService = {
-    // --- XP e LIVELLI ---
+
     async getStatus(xpTotali: number) {
         const query = `
             SELECT numero, nome, xp_min, xp_max 
@@ -39,7 +39,7 @@ export const gamificationService = {
         };
     },
 
-    // --- BADGE UTENTE ---
+
     async getUserBadges(userId: number) {
         const query = `
             SELECT ob.id AS id_obiettivo, ob.nome, ob.descrizione, ob.xp_valore, os.data_conseguimento
@@ -52,26 +52,24 @@ export const gamificationService = {
         return badges;
     },
 
-    // --- CATALOGO BADGE ---
+
     async getAllBadges() {
         const [allBadges] = await pool.query('SELECT id, nome, descrizione, xp_valore FROM obiettivi ORDER BY xp_valore ASC');
         return allBadges;
     },
 
-    // --- SYNC BADGES (Transazionale) ---
     async syncBadges(userId: number, connection: any): Promise<{ newBadges: ObiettivoSbloccato[], revokedBadgeIds: number[] }> {
         const newBadges: ObiettivoSbloccato[] = [];
         const revokedBadgeIds: number[] = [];
 
-        // 1. Recupera esami
+
         const [exams] = await connection.query('SELECT * FROM esami WHERE id_utente = ? ORDER BY data ASC', [userId]);
 
-        // 2. Badge posseduti
+
         const [existing] = await connection.query('SELECT id_obiettivo FROM obiettivi_sbloccati WHERE id_utente = ?', [userId]);
         const existingIds = new Set<number>(existing.map((r: any) => r.id_obiettivo));
 
-        // 3. Regole (Centralizzate in config/gamificationRules.ts)
-        // Iteriamo sulle regole importate invece di definirle qui
+        // Itera sulle regole importate
         for (const rule of BADGE_RULES) {
             // Casting esplicito o adattamento dei dati se necessario, ma qui l'interfaccia Exam corrisponde a quanto atteso
             const isMet = rule.check(exams as Exam[]);
@@ -87,7 +85,7 @@ export const gamificationService = {
         return { newBadges, revokedBadgeIds };
     },
 
-    // Helper: Assegna
+
     async assignBadge(userId: number, badgeId: number, connection: any, list: ObiettivoSbloccato[]) {
         const [rows] = await connection.query('SELECT * FROM obiettivi WHERE id = ?', [badgeId]);
         if (!rows.length) return;
@@ -105,7 +103,7 @@ export const gamificationService = {
         } as ObiettivoSbloccato);
     },
 
-    // Helper: Revoca
+
     async revokeBadge(userId: number, badgeId: number, connection: any, list: number[]) {
         const [rows] = await connection.query('SELECT xp_valore FROM obiettivi WHERE id = ?', [badgeId]);
         if (!rows.length) return;

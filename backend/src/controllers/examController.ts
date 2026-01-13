@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { examService } from '../services/examService';
 
-// GET: Ottieni tutti gli esami CON FILTRI
+
 export const getExams = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
@@ -20,7 +20,7 @@ export const getExams = async (req: Request, res: Response) => {
     }
 };
 
-// POST: Aggiungi esame (max 5 esami)
+
 export const addExam = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
@@ -45,7 +45,7 @@ export const addExam = async (req: Request, res: Response) => {
     }
 };
 
-// PUT: Aggiorna esame
+
 export const updateExam = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
@@ -67,7 +67,7 @@ export const updateExam = async (req: Request, res: Response) => {
     }
 };
 
-// DELETE: Rimuovi esame
+
 export const deleteExam = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ message: 'Utente non autenticato' });
