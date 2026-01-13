@@ -42,10 +42,6 @@ INSERT INTO `utenti` (`id`, `email`, `password`, `nome`, `cognome`, `ruolo`, `xp
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `livelli`
---
-
---
 -- Dump dei dati per la tabella `livelli`
 --
 
@@ -59,10 +55,6 @@ INSERT INTO `livelli` (`id`, `numero`, `nome`, `descrizione`, `xp_min`, `xp_max`
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `obiettivi`
---
-
---
 -- Dump dei dati per la tabella `obiettivi`
 --
 
@@ -73,10 +65,6 @@ INSERT INTO `obiettivi` (`id`, `nome`, `descrizione`, `xp_valore`) VALUES
 (4, 'Giro di Boa', 'Raggiungi 90 CFU', 800);
 
 -- --------------------------------------------------------
-
---
--- Struttura della tabella `esami`
---
 
 --
 -- Dump dei dati per la tabella `esami`
@@ -111,10 +99,6 @@ INSERT INTO `esami` (`id`, `id_utente`, `nome`, `voto`, `lode`, `cfu`, `data`, `
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `obiettivi_sbloccati`
---
-
---
 -- Dump dei dati per la tabella `obiettivi_sbloccati`
 --
 
@@ -127,6 +111,19 @@ INSERT INTO `obiettivi_sbloccati` (`id_utente`, `id_obiettivo`, `data_conseguime
 (3, 1, '2025-12-23'),
 (3, 2, '2025-12-23'),
 (3, 3, '2025-12-23');
+
+-- --------------------------------------------------------
+
+--
+-- Dump dei dati per la tabella `impostazioni_utente`
+--
+
+INSERT INTO `impostazioni_utente` (`id_utente`) VALUES
+(1),
+(2),
+(3),
+(4),
+(5);
 
 COMMIT;
 
