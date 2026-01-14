@@ -1,28 +1,23 @@
 <script setup lang="ts">
 import NavBar from '../components/NavBar.vue'
-import IconLogo from '../components/icons/IconLogo.vue'
 import IconBack from '../components/icons/IconBack.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 </script>
 
 <template>
   <div class="flex-grow flex flex-col font-sans">
     
-    <header class="bg-[#151e2b] text-white py-4 px-8 shadow-md flex items-center">
-      <div class="flex items-center gap-3">
-        <IconLogo class="h-10 w-10 text-white" />
-        <span class="text-2xl font-bold tracking-wide">StudentHub</span>
-      </div>
-    </header>    
-
     <NavBar />
 
     <main class="flex-grow container mx-auto px-4 py-12 max-w-4xl">
       
       <div class="mb-8">
-        <router-link to="/" class="inline-flex items-center gap-2 text-gray-600 hover:text-[#3b76ad] transition font-bold text-lg">
+        <div @click="router.back()" class="inline-flex items-center gap-2 text-gray-600 hover:text-[#3b76ad] transition font-bold text-lg cursor-pointer">
           <IconBack class="h-6 w-6" />
-          Torna alla Home
-        </router-link>
+          Indietro
+        </div>
       </div>
       <div class="mb-10 border-b border-gray-300 pb-6">
         <h1 class="text-4xl font-extrabold text-[#3b76ad] mb-2">Termini e Condizioni</h1>

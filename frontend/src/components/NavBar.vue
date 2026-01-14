@@ -2,7 +2,7 @@
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
-import IconLogo from './icons/IconLogo.vue'
+import IconNavbarLogo from './icons/IconNavbarLogo.vue'
 import IconUser from './icons/IconUser.vue'
 import IconSettings from './icons/IconSettings.vue'
 import IconLogout from './icons/IconLogout.vue'
@@ -19,6 +19,10 @@ const goToSettings = () => {
   router.push('/settings')
 }
 
+const props = defineProps<{
+  hideUserInfo?: boolean
+}>()
+
 const showSettings = computed(() => {
   const user = authStore.user
   return user && user.ruolo !== '1' && user.ruolo !== '2'
@@ -29,11 +33,13 @@ const showSettings = computed(() => {
   <nav class="bg-secondary text-white py-4 px-8 shadow-md flex justify-between items-center relative z-50">
     
     <div @click="router.push('/home')" class="flex items-center gap-3 cursor-pointer hover:opacity-90 transition">
-      <IconLogo />
-      <span class="text-2xl font-bold tracking-wide">StudentHub</span>
+      <div class="text-white w-10 h-10">
+        <IconNavbarLogo />
+      </div>
+      <span class="text-2xl font-bold tracking-wide">Studenthub</span>
     </div>
 
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4" v-if="authStore.user && !props.hideUserInfo">
       <span class="text-lg font-medium hidden md:block">
         Ciao, {{ authStore.user?.nome || 'Studente' }}
       </span>

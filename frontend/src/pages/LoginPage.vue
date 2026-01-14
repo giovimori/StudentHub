@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import IconLogo from '../components/icons/IconLogo.vue'
+import NavBar from '../components/NavBar.vue'
 import IconBack from '../components/icons/IconBack.vue'
 
 const router = useRouter()
@@ -35,20 +35,15 @@ const handleLogin = async () => {
 <template>
   <div class="flex-grow flex flex-col bg-[#f8f9fa] font-sans">
     
-    <header class="bg-[#151e2b] text-white py-4 px-8 shadow-md flex items-center">
-      <div class="flex items-center gap-3 cursor-pointer" @click="router.push('/')">
-        <IconLogo class="h-10 w-10 text-white" />
-        <span class="text-2xl font-bold tracking-wide">StudentHub</span>
-      </div>
-    </header>
+    <NavBar />
 
     <main class="flex-grow flex flex-col items-center justify-center px-4">
       
       <div class="mb-6 w-full max-w-md">
-        <router-link to="/" class="inline-flex items-center gap-2 text-gray-600 hover:text-[#3b76ad] transition font-bold text-lg">
+        <div @click="router.back()" class="inline-flex items-center gap-2 text-gray-600 hover:text-[#3b76ad] transition font-bold text-lg cursor-pointer">
           <IconBack class="h-6 w-6" />
-          Torna alla Home
-        </router-link>
+          Indietro
+        </div>
       </div>
       
       <div class="bg-[#151e2b] text-white w-full max-w-md p-8 rounded-3xl shadow-2xl">
