@@ -7,7 +7,7 @@
 
 ---
 
-## Introduzione Rapida
+## Introduzione
 
 StudentHub è una piattaforma web interattiva progettata per trasformare la gestione della carriera universitaria in un'esperienza coinvolgente (Gamification). Sviluppato per il corso di **Ingegneria dei Sistemi Web** presso l'Università di Bologna.
 
@@ -17,11 +17,11 @@ Progetto realizzato da:
 *   **Rei Mici**
 *   **Giovanni Morelli**
 
-## Avvio Rapido (Quick Start)
+## Avvio
 
 Per avviare il progetto in locale:
 
-### Opzione 1: Docker (Consigliato)
+### Opzione 1: Docker
 ```bash
 docker compose up --build
 ```
