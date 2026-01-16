@@ -11,7 +11,7 @@ import settingsRoutes from './src/routes/settingsRoutes';
 import userRoutes from './src/routes/userRoutes';
 import statsRoutes from './src/routes/statsRoutes';
 import gamificationRoutes from './src/routes/gamificationRoutes';
-import adminRoutes from './src/routes/adminRoutes'; // <--- 1. IMPORTA QUI
+import adminRoutes from './src/routes/adminRoutes';
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/gamification', gamificationRoutes);
-app.use('/api/admin', adminRoutes); // <--- 2. REGISTRA LA ROTTA QUI
+app.use('/api/admin', adminRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {

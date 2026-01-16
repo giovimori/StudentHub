@@ -6,7 +6,7 @@ export interface Exam {
 
 interface BadgeRule {
     id: number;
-    description: string; // Utile per debug/documentazione
+    description: string;
     check: (exams: Exam[]) => boolean;
 }
 
