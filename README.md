@@ -11,12 +11,6 @@
 
 StudentHub è una piattaforma web interattiva progettata per trasformare la gestione della carriera universitaria in un'esperienza coinvolgente (Gamification). Sviluppato per il corso di **Ingegneria dei Sistemi Web** presso l'Università di Bologna.
 
-## Team di Sviluppo
-Progetto realizzato da:
-*   **Diego Andruccioli**
-*   **Rei Mici**
-*   **Giovanni Morelli**
-
 ## Avvio
 
 Per avviare il progetto in locale:
@@ -36,5 +30,14 @@ Requisiti: Node.js v18+, MySQL.
 3.  Avviare Backend: `cd backend && npm install && npm run dev`
 4.  Avviare Frontend: `cd frontend && npm install && npm run dev`
 
----
 *Per tutti i dettagli approfonditi, vedere il PDF allegato.*
+
+## Autori
+
+*   **Diego Andruccioli**
+*   **Rei Mici**
+*   **Giovanni Morelli**
+
+---
+*Corso di Ingegneria dei Sistemi Web | CdL Tecnologie dei Sistemi Informatici | Università di Bologna | A.A. 2025-2026*
+
